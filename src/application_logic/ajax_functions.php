@@ -8,3 +8,5 @@ if (strcmp($_POST["function"],"delete_user_confirmation")==0)
     delete_sql($_POST['id'], $con);
 if (strcmp($_POST["function"],"update_user_confirmation")==0) 
     update_confirmed_sql($_POST['id'], $con);
+if (strcmp($_POST["function"],"delete_product")==0) 
+    delete_product_sql($_POST['id'], $con);

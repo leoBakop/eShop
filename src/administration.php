@@ -18,7 +18,7 @@ if(! loged_in_user()) back_to_index();
 
     <?php
         
-        if(strcmp($_SESSION["Role"], "Admin")!=0) return_to_welcome();
+        if(strcmp($_SESSION["Role"], "Admin")!=0) go_to_error();
         //print_users_sql($con);
         print_users_ajax_sql($con);
     ?>

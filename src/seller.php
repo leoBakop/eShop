@@ -15,9 +15,11 @@
 </head>
 <body>
     <?php 
-    if(strcmp($_SESSION['Role'], "ProductSeller")!=0) 
+    if(strcmp($_SESSION['Role'], "ProductSeller")!=0){ 
         go_to_error();
-    print_sellers_products_sql($_SESSION["Username"],$con);
+        die ; 
+    }
+    print_sellers_products_sql_ajax($_SESSION["Username"],$con);
     ?>
   
 

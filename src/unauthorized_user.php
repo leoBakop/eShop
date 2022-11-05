@@ -1,6 +1,3 @@
-<?php
-if(! loged_in_user()) back_to_index();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

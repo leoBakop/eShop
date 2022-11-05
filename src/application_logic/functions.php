@@ -248,6 +248,66 @@ function delete_product_sql($id,$con){
     $res=mysqli_query($con, $sql);
 }
 
+// ajax/sellers
+function print_sellers_products_sql_ajax($creator,$con){
+    $sql = "select * from products where  SellerName='$creator'";
+    $res=mysqli_query($con, $sql);
+    echo "<table>";
+    for($i=0; $i<$res->num_rows; $i++){
+        $row=$res->fetch_assoc();
+        print_single_product_sql_ajax($row, $i,$con);
+    }
+    echo "</table>";
+
+    ?>
+    <script src="./application_logic/jquery-3.6.1.js"></script>
+    <script type="text/javascript">
+    
+    function delete_product(id,con){
+        $.ajax({
+            type:'post',
+            url:'./application_logic/ajax_functions.php',
+            data:{function: 'delete_product', id:id, con:con},
+            success:function(data){
+                $('#'+id).detach();
+            }
+        });
+    
+    };
+    </script>
+    <?php
+}
+
+function print_single_product_sql_ajax($row, $i,$con){
+    $id=$row["ID"];
+    echo "<tr id=$id>";
+    echo "<th>".$row["Name"]."</th>";
+    echo "<th>".$row["ProductCode"]."</th>";
+    echo "<th>".$row["Price"]."</th>";
+    echo "<th>".$row["DateOfWithdrawal"]."</th>";
+    ?><!-- button in order to upadte confirm and delete-->
+    <th>
+    <form method="post">
+        <input type="submit" value="Update product" 
+                name="update_product_button<?php echo "_$i"; ?>"  class="button"/> 
+        <input type="submit" value="Delete product" 
+                onclick="delete_product(<?php echo $id?>)" class="button"/> 
+    </form>    
+           
+    
+    </th>
+    <?php
+    
+    if(array_key_exists('update_product_button_'.$i, $_POST)){
+        
+        go_to_update_product_sql($row["ID"],$con);
+        die;
+    }
+    echo "</tr>";
+    
+}
+
+
 //products.php
 function print_all_products_sql($con, $user_id){
     $sql = "select * from products";
@@ -417,7 +477,7 @@ function print_single_cart_user_sql($row,$i,$con){
 }
 
 
-//cart/ajax version
+// cart/ajax version
 function print_cart_ajax($user_id,$con){
     $sql = "SELECT * from carts where User_id='$user_id' ";
     $res=mysqli_query($con, $sql);
@@ -435,13 +495,11 @@ function print_cart_ajax($user_id,$con){
     <script type="text/javascript">
     
     function remove_from_cart(id,con){
-        alert("inside rem");
         $.ajax({
             type:'post',
             url:'./application_logic/ajax_functions.php',
             data:{function: 'remove_from_cart', id:id, con:con},
             success:function(data){
-                alert("success ");
                 $('#'+id).detach();
             }
         });
@@ -492,7 +550,7 @@ function delete_from_cart_sql($cart_id,$con){
 
 function go_to_error(){
     ?><script>window.location.replace("./unauthorized_user.php");</script><?php
-    die ;
+    
 }
 
 function loged_in_user(){
