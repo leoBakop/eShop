@@ -81,14 +81,14 @@ function print_users_ajax_sql($con){
     echo "</table>";
     ?>
     
-    <script src="/jquery/jquery-3.6.1.js"></script>
+    <script src="./application_logic/jquery-3.6.1.js"></script>
     <script type="text/javascript">
     
     function update_user(id){
         $.ajax({
 
             type:'post',
-            url:'ajax_functions.php',
+            url:'./application_logic/ajax_functions.php',
             data:{function: 'update_user_confirmation', id:id},
             success:function(data){
                 $('#'+id).replaceWith("1");
@@ -100,7 +100,7 @@ function print_users_ajax_sql($con){
         $.ajax({
 
             type:'post',
-            url:'ajax_functions.php',
+            url:'./application_logic/ajax_functions.php',
             data:{function: 'delete_user_confirmation', id:id},
             success:function(data){
                 $('#all'+id).detach();

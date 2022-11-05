@@ -19,8 +19,8 @@ if(! loged_in_user()) back_to_index();
     <?php
         
         if(strcmp($_SESSION["Role"], "Admin")!=0) return_to_welcome();
-        print_users_sql($con);
-        //print_users_ajax_sql($con);
+        //print_users_sql($con);
+        print_users_ajax_sql($con);
     ?>
     
     <a href="welcome.php"> return to welcome page</a>
