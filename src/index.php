@@ -7,22 +7,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>index</title>
 </head>
 <body>
-    <form method="GET"> <!-- ex form method="GET" action="welcome.php"> it sends the data in the .php page  -->
-   
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
-        <label for="password">password:</label><br>
-        <input type="password" id="password" name="password"><br><br>
-        <input type="submit" name="login" value="login">
-    </form>
-    <br>
-    <a href="sign_up.php">not a user?</a>    
+    <div class="container text-center">
+        <div class="box">
+            <form method="GET"> <!-- ex form method="GET" action="welcome.php"> it sends the data in the .php page  -->
+            
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">password:</label><br>
+            <input type="password" id="password" name="password"><br><br>
+            <input type="submit" name="login" value="login">
+            </form>
+            <br>
+            <a href="sign_up.php">not a user?</a>   
+        </div>
+        
+    </div>
+     
     
    
     <?php
@@ -31,8 +40,6 @@
 
     ?>
     
-    
-
     
 </body>
 </html>
