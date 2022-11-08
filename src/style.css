@@ -1,74 +1,129 @@
+/* general*/
 body {
-    background-image: url('back.png');
+  background-image: url('back.png');
+}
+
+.button {
+  background-color: #4CAF50;
+  /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: dotted;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+}
+
+.button:hover {
+  background-color: #234b23;
+  /* Green */
+  color: white;
 }
 
 
-
+/*index*/
 .box {
-    margin: 300px;
-    margin-left: 400px;
-    height: 200px;
-    width: 200px;
-    background-color: rgb(2, 94, 73);
-    background-blend-mode: difference;
+  margin: 300px;
+  margin-left: 400px;
+  height: 200px;
+  width: 200px;
+  background-color: rgb(2, 94, 73);
+  background-blend-mode: difference;
 }
 
+table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  border: 3px solid purple;
+}
+
+
+th,td {
+  padding: 20px;
+  color: rgb(255, 252, 252);
+
+}
+/*welcome.php*/
+
+.welcome_info {
+  float: right;
+}
+
+.log_out_btn {
+  float: right;
+}
+
+.user {
+  padding: 18px 20px;
+  text-align: center;
+  font-size: large;
+  height: 63px;
+  color: rgb(255, 252, 252);
+  background-color: #4CAF50;
+  float: left;
+}
 
 
 /* The side navigation menu */
 .sidebar {
-    margin: 0;
-    padding: 0;
-    width: 200px;
-    background-color: #f1f1f1;
-    position: fixed;
-    height: 27%;
-    overflow: auto;
+  position: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+  height: 28%;
+  float: left;
+}
+
+/* Sidebar links */
+.sidebar a {
+  display: block;
+  color: rgb(0, 0, 0);
+  padding: 16px;
+  text-decoration: none;
+}
+
+/* Active/current link */
+.sidebar a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+/* Links on mouse-over */
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: rgb(255, 255, 255);
+}
+
+/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+div.content {
+  margin-left: 200px;
+  padding: 1px 16px;
+  height: 1000px;
+}
+
+/* On screens that are less than 700px wide, make the sidebar into a topbar */
+@media screen and (max-width: 700px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
   }
-  
-  /* Sidebar links */
+
   .sidebar a {
-    display: block;
-    color: rgb(0, 0, 0);
-    padding: 16px;
-    text-decoration: none;
+    float: left;
   }
-  
-  /* Active/current link */
-  .sidebar a.active {
-    background-color: #04AA6D;
-    color: white;
-  }
-  
-  /* Links on mouse-over */
-  .sidebar a:hover:not(.active) {
-    background-color: #555;
-    color: rgb(255, 255, 255);
-  }
-  
-  /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+
   div.content {
-    margin-left: 200px;
-    padding: 1px 16px;
-    height: 1000spx;
+    margin-left: 0;
   }
-  
-  /* On screens that are less than 700px wide, make the sidebar into a topbar */
-  @media screen and (max-width: 700px) {
-    .sidebar {
-      width: 100%;
-      height: auto;
-      position: relative;
-    }
-    .sidebar a {float: left;}
-    div.content {margin-left: 0;}
+}
+
+/* On screens that are less than 400px, display the bar vertically, instead of horizontally */
+@media screen and (max-width: 400px) {
+  .sidebar a {
+    text-align: center;
+    float: none;
   }
-  
-  /* On screens that are less than 400px, display the bar vertically, instead of horizontally */
-  @media screen and (max-width: 400px) {
-    .sidebar a {
-      text-align: center;
-      float: none;
-    }
-  }
-  
+}
