@@ -4,7 +4,7 @@ body {
 }
 
 .button {
-  background-color: #4CAF50;
+  background-color: #04AA6D;
   /* Green */
   border: none;
   color: white;
@@ -34,9 +34,10 @@ body {
 }
 
 table {
+  background-blend-mode: darken;
   table-layout: fixed;
   width: 100%;
-  border-collapse: collapse;
+  
   border: 3px solid purple;
 }
 
@@ -62,7 +63,7 @@ th,td {
   font-size: large;
   height: 63px;
   color: rgb(255, 252, 252);
-  background-color: #4CAF50;
+  background-color: #04AA6D;
   float: left;
 }
 
