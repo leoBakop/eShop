@@ -13,30 +13,34 @@ if (!loged_in_user()) back_to_index();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
+    <script src="./javaScript/basic_functionality.js"></script>
+
+
 </head>
 
 <body>
+    <div class="search">
+        <form method="POST">
 
-    <form method="POST">
+            <input class="field" type="text" name="ProductName" id="ProductName">
+            <input class="button" type="submit" name="name" value="search using product name"><br>
 
-        <input type="text" name="ProductName" id="ProductName">
-        <input type="submit" name="name" value="search using product name"><br>
+            <input class="field" type="text" name="sellerName" id="sellerName">
+            <input class="button" type="submit" name="seller" value="search using seller name"><br>
 
-        <input type="text" name="sellerName" id="sellerName">
-        <input type="submit" name="seller" value="search using seller name"><br>
+            <input class="field" type="text" name="category" id="category">
+            <input class="button" type="submit" name="Category" value="search using category"><br>
 
-        <input type="text" name="category" id="category">
-        <input type="submit" name="Category" value="search using category"><br>
+            <input class="field" type="text" name="date" id="date">
+            <input class="button" type="submit" name="date_button" value="search using date of withdrawl"><br>
 
-        <input type="text" name="date" id="date">
-        <input type="submit" name="date_button" value="search using date of withdrawl"><br>
+            <input class="button" type="submit" name="all_button" value="print all available products"><br>
 
-        <input type="submit" name="all_button" value="print all available products"><br>
-
-    </form>
+        </form>
+    </div>
 
 
-    <a href="cart.php"> go to the cart</a>
+
     <?php
     if (array_key_exists('name', $_POST)) search_product_by_productName_sql($_POST["ProductName"], $con, $_SESSION["User_id"]);
     else if (array_key_exists('seller', $_POST)) search_product_by_sellerName_sql($_POST["sellerName"], $con, $_SESSION["User_id"]);
@@ -51,8 +55,9 @@ if (!loged_in_user()) back_to_index();
         this function is going to navigate to a different page and perform the update */
 
     ?>
+    <button class="button" onclick="go_to_welcome()">back </button>
+    <button class="button" onclick="go_to_cart()">cart </button>
 
-    <a href="welcome.php">back to welcome page</a>
 
 </body>
 

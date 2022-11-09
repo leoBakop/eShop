@@ -15,16 +15,17 @@ if (!loged_in_user()) back_to_index();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./javaScript/basic_functionality.js"></script>
     <title>Cart</title>
 </head>
 
 <body>
     <?php
     print_cart_ajax($_SESSION["User_id"], $con);
-    //print_favorites_mongodb($_SESSION["User_id"]);
     ?>
+    <br><br><br>
+    <button class="button" onclick="go_to_welcome()">back </button>
 
-    <a href="welcome.php">back to welcome</a>
 </body>
 
 </html>

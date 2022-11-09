@@ -1,6 +1,6 @@
 /* general*/
 body {
-  background-image: url('back.png');
+  background-image: url('./../imj/back.png');
 }
 
 .button {
@@ -23,6 +23,7 @@ body {
 }
 
 
+
 /*index*/
 .box {
   margin: 300px;
@@ -34,17 +35,16 @@ body {
 }
 
 table {
-  background-blend-mode: darken;
   table-layout: fixed;
-  width: 100%;
-  
-  border: 3px solid purple;
+  width: 50%;
+  margin-left: 570px;
+  border: 3px solid #04AA6D;
 }
 
 
 th,td {
-  padding: 20px;
-  color: rgb(255, 252, 252);
+  padding: 25px;
+  color: #04AA6D;
 
 }
 /*welcome.php*/
@@ -55,6 +55,7 @@ th,td {
 
 .log_out_btn {
   float: right;
+  background-color: #04AA6D;
 }
 
 .user {
@@ -127,4 +128,30 @@ div.content {
     text-align: center;
     float: none;
   }
+}
+
+
+/*cart.php */
+.total_cost{
+  padding: 18px 20px;
+  margin-left: 570px;
+  text-align: center;
+  font-size: large;
+  height: 15px;
+  color: rgb(255, 252, 252);
+  background-color: #04AA6D;
+  float: left;
+
+}
+
+/*products.php */
+.search{
+  table-layout: fixed;
+  width: 30%;
+  margin-left: 0;
+  border: 3px solid #04AA6D;
+  background-color: #04AA6D;
+}
+.field{
+  width: 30%;
 }

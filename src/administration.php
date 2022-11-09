@@ -14,6 +14,7 @@ if (!loged_in_user()) back_to_index();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./javaScript/basic_functionality.js"> </script>
     <title>Administrator</title>
 </head>
 
@@ -28,7 +29,8 @@ if (!loged_in_user()) back_to_index();
         <?php print_users_ajax_sql($con);?>
     </div>
 
-    <a href="welcome.php"> return to welcome page</a>
+    <button class="button" onclick="go_to_welcome()">back </button>
+
 </body>
 </body>
 

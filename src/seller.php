@@ -13,6 +13,7 @@ if (!loged_in_user()) back_to_index();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./javaScript/basic_functionality.js"></script>
     <title>Seller</title>
 </head>
 
@@ -27,10 +28,10 @@ if (!loged_in_user()) back_to_index();
 
 
     <form action="add_product.php" method="post">
-        <input type="submit" value="New product">
+        <input type="submit" value="New product" class="button">
     </form>
 
-    <a href="welcome.php">go back to welcome page</a>
+    <button class="button" onclick="go_to_welcome()">back </button>
 </body>
 
 </html>

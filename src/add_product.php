@@ -13,11 +13,12 @@ if (!loged_in_user()) back_to_index();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./javaScript/basic_functionality.js"></script>
     <title>Add concert</title>
 </head>
 
 <body>
-    <form method="GET">
+    <form method="GET" class="search">
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name"><br>
         <label for="date">Date of withdrawal(YYYY-MM-DD):</label><br>
@@ -29,7 +30,7 @@ if (!loged_in_user()) back_to_index();
         <label for="category">Category:</label><br>
         <input type="text" id="category" name="category"><br>
 
-        <input type="submit" name="add_product" value="Add product">
+        <input class="button" type="submit" name="add_product" value="Add product">
     </form>
     <?php
     if (array_key_exists('add_product', $_GET)) add_product_sql(

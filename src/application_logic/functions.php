@@ -288,7 +288,7 @@ function print_single_product_sql_ajax($row, $i,$con){
     ?><!-- button in order to upadte confirm and delete-->
     <th>
     <form method="post">
-        <input type="submit" value="Update product" 
+        <input type="submit" value="Update product"  
                 name="update_product_button<?php echo "_$i"; ?>"  class="button"/> 
         <input type="submit" value="Delete product" 
                 onclick="delete_product(<?php echo $id?>)" class="button"/> 
@@ -330,7 +330,7 @@ function print_single_product_user_sql($row,$i,$con, $user_id){
     ?><!-- button in order to upadte confirm and delete-->
     <th>
     <form  method="post">
-        <input type="submit" value="Add to Cart" 
+        <input class="button" type="submit" value="Add to Cart" 
                name="cart_button<?php echo "_$i"; ?>" class="button"/> <!-- $i in order to create different buttons and listeners for every row -->
     </form>
     </th>
@@ -506,9 +506,16 @@ function print_cart_ajax($user_id,$con){
     
     };
     </script>
+
+    <div class="total_cost">
     <?php
     $_SESSION['totCost']=$totCost;
     echo "total cost is ".   $_SESSION['totCost']."$ <br>" ;
+    ?>
+    </div>
+    
+    <?php
+    
 }
 
 function print_single_cart_user_sql_ajax($row, $i,$con){
