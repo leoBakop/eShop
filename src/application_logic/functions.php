@@ -20,11 +20,29 @@ function sign_up_sql($name, $surname,
 }
 //index.php
 function log_in_sql($username, $password,$con){
-    $sql = "select * from users WHERE Password=$password and Username='$username' and Confirmed=1;";
+    $sql = "select * from users WHERE Password=$password and Username='$username'";
     $res=mysqli_query($con, $sql);
 
     $row=$res->fetch_assoc();
-    if($res->num_rows<1) return false;
+    if($row["Confirmed"]==0){
+        echo ("
+        <div class=\"no_entrance\">
+            <h2>You have not been confirmed</h2><br>
+            <h2>Please communicate with an administrator</h2>
+        </div>
+        ");
+        return false;
+    }
+    if($res->num_rows<1){
+        echo ("
+        <div class=\"no_entrance\">
+            <h2>There is no user with these combination</h2><br>
+        </div>
+        ");
+        
+        return false;
+    }
+    
     $_SESSION["Role"]=$row["Role"];
     $_SESSION["Username"]=$username;
     $_SESSION["User_id"]=$row["ID"];

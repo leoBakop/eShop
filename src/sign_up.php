@@ -17,7 +17,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 </head>
 
 <body>
-    <form method="GET">
+    <form method="GET" class="search">
         <!--action="welcome.php" it sends the data in the .php page  -->
 
 
