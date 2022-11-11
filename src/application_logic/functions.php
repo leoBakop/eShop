@@ -47,6 +47,14 @@ function print_users_sql($con){
     $res=mysqli_query($con, $sql);
 
     echo "<table>";
+    ?>
+    <tr class="header_line">
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Confirmed</th>
+    </tr>
+    <?php
     for($i=0; $i<$res->num_rows; $i++){
         $row=$res->fetch_assoc();
         print_single_user_sql($row, $i,$con);
@@ -60,16 +68,29 @@ function print_users_ajax_sql($con){
     $res=mysqli_query($con, $sql);
 
     echo "<table>";
+    //first line of the table/title of each column
+    ?>
+    <tr class="header_line">
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Confirmed</th>
+    </tr>
+    
+    <?php
+
     for($i=0; $i<$res->num_rows; $i++){
         
         $row=$res->fetch_assoc();
         print_single_user_ajax_sql($row, $i,$con);
         $tmp_id=$row["ID"];
         echo (
-            "<th>
+            "<th class=\"normal_th\">
         
-            <button class=\"button\" type=\"button\" onclick=\"update_user($tmp_id)\"> update</button> <br>
-            <button class=\"button\" type=\"button\" onclick=\"delete_user($tmp_id)\"> delete</button> <br>
+            <button class=\"button\" type=\"button\" onclick=\"update_user($tmp_id)\"> update</button> 
+            </th>
+            <th class=\"normal_th\">
+            <button class=\"button\" type=\"button\" onclick=\"delete_user($tmp_id)\"> delete</button> 
     
             </th>
             </tr>
@@ -118,23 +139,24 @@ function print_users_ajax_sql($con){
 function print_single_user_ajax_sql($row, $i,$con){
     $tmp_id=$row["ID"];
     echo "<tr id=all$tmp_id>";
-    echo "<th>".$row["Username"]."</th>";
-    echo "<th>".$row["Email"]."</th>";
-    echo "<th>".$row["Role"]."</th>";
-    echo "<th><div id=$tmp_id >".$row["Confirmed"]."</div></th>";
+    echo "<th class=\"normal_th\">".$row["Username"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Email"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Role"]."</th>";
+    echo "<th class=\"normal_th\"><div id=$tmp_id >".$row["Confirmed"]."</div></th>";
     
     
 }
 
 
 function print_single_user_sql($row, $i,$con){
+
     echo "<tr>";
-    echo "<th>".$row["Username"]."</th>";
-    echo "<th>".$row["Email"]."</th>";
-    echo "<th>".$row["Role"]."</th>";
-    echo "<th>".$row["Confirmed"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Username"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Email"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Role"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Confirmed"]."</th>";
     ?><!-- button in order to upadte confirm and delete-->
-    <th>
+    <th class="normal_th">
     <form  method="post">
         <input type="submit" value="Update Confirmed" 
                name="confirmed_button<?php echo "_$i"; ?>" class="button"/> <!-- $i in order to create different buttons and listeners for every row -->
@@ -208,6 +230,14 @@ function print_sellers_products_sql($creator,$con){
     $sql = "select * from products where  SellerName='$creator'";
     $res=mysqli_query($con, $sql);
     echo "<table>";
+    ?>
+    <tr class="header_line">
+        <th>Name</th>
+        <th>Product Code</th>
+        <th>Price</th>
+        <th>Date Of Withdrawal</th>
+    </tr>
+    <?php
     for($i=0; $i<$res->num_rows; $i++){
         $row=$res->fetch_assoc();
         print_single_product_sql($row, $i,$con);
@@ -217,12 +247,12 @@ function print_sellers_products_sql($creator,$con){
 
 function print_single_product_sql($row, $i,$con){
     echo "<tr>";
-    echo "<th>".$row["Name"]."</th>";
-    echo "<th>".$row["ProductCode"]."</th>";
-    echo "<th>".$row["Price"]."</th>";
-    echo "<th>".$row["DateOfWithdrawal"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Name"]."</th>";
+    echo "<th class=\"normal_th\">".$row["ProductCode"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Price"]."</th>";
+    echo "<th class=\"normal_th\">".$row["DateOfWithdrawal"]."</th>";
     ?><!-- button in order to upadte confirm and delete-->
-    <th>
+    <th class="normal_th">
     <form method="post">
         <input type="submit" value="Update product" 
                 name="update_product_button<?php echo "_$i"; ?>"  class="button"/> 
@@ -253,6 +283,14 @@ function print_sellers_products_sql_ajax($creator,$con){
     $sql = "select * from products where  SellerName='$creator'";
     $res=mysqli_query($con, $sql);
     echo "<table>";
+    ?>
+    <tr class="header_line">
+        <th>Name</th>
+        <th>Product Code</th>
+        <th>Price</th>
+        <th>Date Of Withdrawal</th>
+    </tr>
+    <?php
     for($i=0; $i<$res->num_rows; $i++){
         $row=$res->fetch_assoc();
         print_single_product_sql_ajax($row, $i,$con);
@@ -281,21 +319,25 @@ function print_sellers_products_sql_ajax($creator,$con){
 function print_single_product_sql_ajax($row, $i,$con){
     $id=$row["ID"];
     echo "<tr id=$id>";
-    echo "<th>".$row["Name"]."</th>";
-    echo "<th>".$row["ProductCode"]."</th>";
-    echo "<th>".$row["Price"]."</th>";
-    echo "<th>".$row["DateOfWithdrawal"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Name"]."</th>";
+    echo "<th class=\"normal_th\">".$row["ProductCode"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Price"]."</th>";
+    echo "<th class=\"normal_th\">".$row["DateOfWithdrawal"]."</th>";
     ?><!-- button in order to upadte confirm and delete-->
-    <th>
+    
     <form method="post">
+    <th class="normal_th">
         <input type="submit" value="Update product"  
                 name="update_product_button<?php echo "_$i"; ?>"  class="button"/> 
-        <input type="submit" value="Delete product" 
+    </th>
+    <th class="normal_th">
+            <input type="submit" value="Delete product" 
                 onclick="delete_product(<?php echo $id?>)" class="button"/> 
+    </th>
     </form>    
            
     
-    </th>
+    
     <?php
     
     if(array_key_exists('update_product_button_'.$i, $_POST)){
@@ -314,6 +356,14 @@ function print_all_products_sql($con, $user_id){
     $res=mysqli_query($con, $sql);
 
     echo "<table>";
+    ?>
+    <tr class="header_line">
+        <th>Name</th>
+        <th>Product Code</th>
+        <th>Price</th>
+        <th>Date Of Withdrawal</th>
+    </tr>
+    <?php
     for($i=0; $i<$res->num_rows; $i++){
         $row=$res->fetch_assoc();
         print_single_product_user_sql($row, $i,$con,$user_id);
@@ -323,12 +373,12 @@ function print_all_products_sql($con, $user_id){
 
 function print_single_product_user_sql($row,$i,$con, $user_id){
     echo "<tr>";
-    echo "<th>".$row["Name"]."</th>";
-    echo "<th>".$row["ProductCode"]."</th>";
-    echo "<th>".$row["Price"]."</th>";
-    echo "<th>".$row["DateOfWithdrawal"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Name"]."</th>";
+    echo "<th class=\"normal_th\">".$row["ProductCode"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Price"]."</th>";
+    echo "<th class=\"normal_th\">".$row["DateOfWithdrawal"]."</th>";
     ?><!-- button in order to upadte confirm and delete-->
-    <th>
+    <th class="normal_th">
     <form  method="post">
         <input class="button" type="submit" value="Add to Cart" 
                name="cart_button<?php echo "_$i"; ?>" class="button"/> <!-- $i in order to create different buttons and listeners for every row -->
@@ -358,6 +408,14 @@ function search_product_by_productName_sql($productName,$con, $user_id){
         return ;
     }
     echo "<table>";
+    ?>
+    <tr class="header_line">
+        <th>Name</th>
+        <th>Product Code</th>
+        <th>Price</th>
+        <th>Date Of Withdrawal</th>
+    </tr>
+    <?php
     for($i=0; $i<$res->num_rows; $i++){
         $row=$res->fetch_assoc();
         print_single_product_user_sql($row, $i,$con, $user_id);
@@ -371,6 +429,14 @@ function search_product_by_sellerName_sql($sellerName,$con, $user_id){
     $sql = "select * from products where  SellerName='$sellerName'";
     $res=mysqli_query($con, $sql);
     echo "<table>";
+    ?>
+    <tr class="header_line">
+        <th>Name</th>
+        <th>Product Code</th>
+        <th>Price</th>
+        <th>Date Of Withdrawal</th>
+    </tr>
+    <?php
     for($i=0; $i<$res->num_rows; $i++){
         $row=$res->fetch_assoc();
         print_single_product_user_sql($row, $i,$con, $user_id);
@@ -388,6 +454,14 @@ function search_product_by_category_sql($category,$con, $user_id){
         return ;
     }
     echo "<table>";
+    ?>
+    <tr class="header_line">
+        <th>Name</th>
+        <th>Product Code</th>
+        <th>Price</th>
+        <th>Date Of Withdrawal</th>
+    </tr>
+    <?php
     for($i=0; $i<$res->num_rows; $i++){
         $row=$res->fetch_assoc();
         print_single_product_user_sql($row, $i,$con, $user_id);
@@ -404,6 +478,14 @@ function search_product_by_date_sql($date,$con, $user_id){
         return ;
     }
     echo "<table>";
+    ?>
+    <tr class="header_line">
+        <th>Name</th>
+        <th>Product Code</th>
+        <th>Price</th>
+        <th>Date Of Withdrawal</th>
+    </tr>
+    <?php
     for($i=0; $i<$res->num_rows; $i++){
         $row=$res->fetch_assoc();
         print_single_product_user_sql($row, $i,$con, $user_id);
@@ -420,6 +502,14 @@ function search_product_by_title_sql($title,$con, $user_id){
         return ;
     }
     echo "<table>";
+    ?>
+    <tr class="header_line">
+        <th>Name</th>
+        <th>Product Code</th>
+        <th>Price</th>
+        <th>Date Of Withdrawal</th>
+    </tr>
+    <?php
     for($i=0; $i<$res->num_rows; $i++){
         $row=$res->fetch_assoc();
         print_single_product_user_sql($row, $i,$con, $user_id);
@@ -436,6 +526,14 @@ function print_cart($user_id,$con){
     $totCost=0;
 
     echo "<table>";
+    ?>
+    <tr class="header_line">
+        <th>Name</th>
+        <th>Product Code</th>
+        <th>Category</th>
+        <th>Price</th>
+    </tr>
+    <?php
     for($i=0; $i<$res->num_rows; $i++){
         $row=$res->fetch_assoc();
         $totCost+=print_single_cart_user_sql($row, $i,$con);
@@ -453,13 +551,13 @@ function print_single_cart_user_sql($row,$i,$con){
     $res=mysqli_query($con, $sql);
     $row=$res->fetch_assoc();
     echo "<tr>";
-    echo "<th>".$row["Name"]."</th>";
-    echo "<th>".$row["ProductCode"]."</th>";
-    echo "<th>".$row["Category"]."</th>";
-    echo "<th>".$row["Price"]."$ </th>";
+    echo "<th class=\"normal_th\">".$row["Name"]."</th>";
+    echo "<th class=\"normal_th\">".$row["ProductCode"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Category"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Price"]."$ </th>";
     
     ?><!-- button in order to upadte confirm and delete-->
-    <th>
+    <th class="normal_th">
     <form  method="post">
         <input type="submit" value="delete this" 
                name="delete_button<?php echo "_$i"; ?>" class="button"/> <!-- $i in order to create different buttons and listeners for every row -->
@@ -484,6 +582,14 @@ function print_cart_ajax($user_id,$con){
     $totCost=0;
 
     echo "<table>";
+    ?>
+    <tr class="header_line">
+        <th>Name</th>
+        <th>Product Code</th>
+        <th>Category</th>
+        <th>Price</th>
+    </tr>
+    <?php
     for($i=0; $i<$res->num_rows; $i++){
         $row=$res->fetch_assoc();
         //$totCost+=print_single_cart_user_sql($row, $i,$con);
@@ -525,13 +631,13 @@ function print_single_cart_user_sql_ajax($row, $i,$con){
     $res=mysqli_query($con, $sql);
     $row=$res->fetch_assoc();
     echo "<tr id=$cart_id>";
-    echo "<th>".$row["Name"]."</th>";
-    echo "<th>".$row["ProductCode"]."</th>";
-    echo "<th>".$row["Category"]."</th>";
-    echo "<th>".$row["Price"]."$ </th>";
+    echo "<th class=\"normal_th\">".$row["Name"]."</th>";
+    echo "<th class=\"normal_th\">".$row["ProductCode"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Category"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Price"]."$ </th>";
     
     ?><!-- button in order to upadte confirm and delete-->
-    <th>
+    <th class="normal_th">
     <form  method="post">
         <input type="submit" value="delete this" onclick="remove_from_cart(<?php echo $cart_id ?>)"
                 class="button"/> <!-- $i in order to create different buttons and listeners for every row -->

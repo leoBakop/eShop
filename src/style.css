@@ -42,7 +42,7 @@ table {
 }
 
 
-th,td {
+.normal_th,td {
   padding: 25px;
   color: #04AA6D;
 
@@ -154,4 +154,19 @@ div.content {
 }
 .field{
   width: 30%;
+}
+
+/* not_authorized.php*/
+
+.not_authorized{
+  background-color: #04AA6D;
+  float: left;
+  width:20%;
+
+}
+
+
+.header_line{
+  background-color: #04AA6D;
+  color: white;
 }

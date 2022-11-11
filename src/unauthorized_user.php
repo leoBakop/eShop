@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,8 +10,14 @@
 
     <title>Error 404</title>
 </head>
+
 <body>
-    <h3>you are not authorized for this page</h3>
+    <div class="not_authorized">
+        <h3>you are not authorized for this page</h3>
+        
+    </div>
+    <br><br><br><br>
     <button class="button" onclick="go_to_welcome()">back </button>
 </body>
+
 </html>
