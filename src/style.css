@@ -52,7 +52,10 @@ table {
 .welcome_info {
   float: right;
 }
-
+.menu_header{
+  float: up;
+  width: 20%;
+}
 .log_out_btn {
   float: right;
   background-color: #04AA6D;
@@ -73,10 +76,19 @@ table {
 .sidebar {
   position: 0;
   width: 200px;
-  background-color: #f1f1f1;
+  background-color: #04AA6D;
   height: 28%;
   float: left;
 }
+
+.nav_accordion {
+  opacity: 0;
+}
+
+.nav_accordion:hover {
+ opacity: 1;
+}
+
 
 /* Sidebar links */
 .sidebar a {

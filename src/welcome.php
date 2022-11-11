@@ -24,23 +24,29 @@ if (!loged_in_user()) back_to_index();
 
 <body>
 
-    <div class="sidebar ">
-        <a class="active" href="products.php">Products</a>
-        <a href="cart.php">Cart</a>
-        <a href="seller.php">Seller</a>
-        <a href="administration.php">Administrator</a>
+    <div class="sidebar">
+        <div class="menu_header">
+            <h1>Menu</h1>
+        </div>
+        <div class="nav_accordion">
+            <a class="active" href="products.php">Products</a>
+            <a href="cart.php">Cart</a>
+            <a href="seller.php">Seller</a>
+            <a href="administration.php">Administrator</a>
+        </div>
+
     </div>
 
     <div class="welcome_info ">
         <div class="log_out_btn button">
-        <form method="post">
-            <input type="submit" value="Log out" name="log_out_button" class="button" />
-        </form>
+            <form method="post">
+                <input type="submit" value="Log out" name="log_out_button" class="button" />
+            </form>
         </div>
-        
+
 
         <div class="user">
-            
+
             <?php echo $_SESSION["Username"] . " (" . $_SESSION["Role"] . ")"  ?>
         </div>
     </div>
