@@ -19,11 +19,10 @@ include "./sql_connection/sql_connection.php";
 </head>
 
 <body>
-    <div class="container text-center">
-        <div class="box">
+    <div class="box text-center">
+        <div class="search">
             <form method="GET">
                 <!-- ex form method="GET" action="welcome.php"> it sends the data in the .php page  -->
-
                 <label for="username">Username:</label><br>
                 <input type="text" id="username" name="username"><br>
                 <label for="password">password:</label><br>
@@ -31,17 +30,17 @@ include "./sql_connection/sql_connection.php";
                 <input type="submit" name="login" value="login">
             </form>
             <br>
-            <a href="sign_up.php">not a user?</a>
         </div>
-
+        <a class="button" href="sign_up.php">not a user?</a>
     </div>
+
 
 
 
     <?php
     if (array_key_exists('login', $_GET)) log_in_sql($_GET['username'], $_GET['password'], $con);
     //if(array_key_exists('login', $_GET)) log_in_mongodb($_GET['username'], $_GET['password']);
-
+    
     ?>
 
 

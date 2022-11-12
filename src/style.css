@@ -4,7 +4,7 @@ body {
 }
 
 .button {
-  background-color: #04AA6D;
+  background-color:  rgb(20, 103, 69);
   /* Green */
   border: none;
   color: white;
@@ -23,30 +23,34 @@ body {
 }
 
 
-
-/*index*/
-.box {
-  margin: 300px;
-  margin-left: 400px;
-  height: 200px;
-  width: 200px;
-  background-color: rgb(2, 94, 73);
-  background-blend-mode: difference;
-}
-
 table {
-  table-layout: fixed;
+  overflow-y:scroll;
   width: 50%;
   margin-left: 570px;
-  border: 3px solid #04AA6D;
+  border: 3px solid  rgb(20, 103, 69);
 }
 
 
 .normal_th,td {
   padding: 25px;
-  color: #04AA6D;
+  color:  rgb(20, 103, 69);
 
 }
+
+
+
+/*index*/
+.box {
+  margin-top: 20%;
+  margin-left: 50%;
+  float:left;
+  height: 220px;
+  width: 200px;
+  background-color: rgb(20, 103, 69);
+  background-blend-mode: difference;
+}
+
+
 /*welcome.php*/
 
 .welcome_info {
@@ -58,7 +62,7 @@ table {
 }
 .log_out_btn {
   float: right;
-  background-color: #04AA6D;
+  background-color:  rgb(20, 103, 69);
 }
 
 .user {
@@ -67,7 +71,7 @@ table {
   font-size: large;
   height: 63px;
   color: rgb(255, 252, 252);
-  background-color: #04AA6D;
+  background-color:  rgb(20, 103, 69);
   float: left;
 }
 
@@ -76,7 +80,7 @@ table {
 .sidebar {
   position: 0;
   width: 200px;
-  background-color: #04AA6D;
+  background-color:  rgb(20, 103, 69);
   height: 28%;
   float: left;
 }
@@ -100,7 +104,7 @@ table {
 
 /* Active/current link */
 .sidebar a.active {
-  background-color: #04AA6D;
+  background-color:  rgb(20, 103, 69);
   color: white;
 }
 
@@ -151,7 +155,7 @@ div.content {
   font-size: large;
   height: 15px;
   color: rgb(255, 252, 252);
-  background-color: #04AA6D;
+  background-color: rgb(20, 103, 69);
   float: left;
 
 }
@@ -161,8 +165,8 @@ div.content {
   table-layout: fixed;
   width: 30%;
   margin-left: 0;
-  border: 3px solid #04AA6D;
-  background-color: #04AA6D;
+  border: 3px solid  rgb(20, 103, 69);
+  background-color:  rgb(20, 103, 69);
 }
 .field{
   width: 30%;
@@ -171,7 +175,7 @@ div.content {
 /* not_authorized.php*/
 
 .not_authorized{
-  background-color: #04AA6D;
+  background-color:  rgb(20, 103, 69);
   float: left;
   width:20%;
 
@@ -179,6 +183,6 @@ div.content {
 
 
 .header_line{
-  background-color: #04AA6D;
+  background-color:  rgb(20, 103, 69);
   color: white;
 }

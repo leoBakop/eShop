@@ -25,23 +25,10 @@ function log_in_sql($username, $password,$con){
 
     $row=$res->fetch_assoc();
     if($row["Confirmed"]==0){
-        echo ("
-        <div class=\"no_entrance\">
-            <h2>You have not been confirmed</h2><br>
-            <h2>Please communicate with an administrator</h2>
-        </div>
-        ");
+        alert("You are not Confirmed,please communicate with an admin");
         return false;
     }
-    if($res->num_rows<1){
-        echo ("
-        <div class=\"no_entrance\">
-            <h2>There is no user with these combination</h2><br>
-        </div>
-        ");
-        
-        return false;
-    }
+    if($res->num_rows<1) return false;
     
     $_SESSION["Role"]=$row["Role"];
     $_SESSION["Username"]=$username;
@@ -692,3 +679,8 @@ function loged_in_user(){
 function back_to_index(){
     ?><script>window.location.replace("./index.php");</script><?php
 }
+
+function alert($string){
+    ?><script> alert("<?php echo $string ?>");</script><?php
+}
+

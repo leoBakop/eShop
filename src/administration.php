@@ -25,7 +25,7 @@ if (!loged_in_user()) back_to_index();
     if (strcmp($_SESSION["Role"], "Admin") != 0) go_to_error();
     //print_users_sql($con);
     ?>
-    <div class="table">
+    <div class="table"  style="overflow-y:scroll;" >
         <?php print_users_ajax_sql($con);?>
     </div>
 
