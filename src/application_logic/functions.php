@@ -24,11 +24,12 @@ function log_in_sql($username, $password,$con){
     $res=mysqli_query($con, $sql);
 
     $row=$res->fetch_assoc();
+    if($res->num_rows<1) return false;   
     if($row["Confirmed"]==0){
         alert("You are not Confirmed,please communicate with an admin");
         return false;
     }
-    if($res->num_rows<1) return false;
+    
     
     $_SESSION["Role"]=$row["Role"];
     $_SESSION["Username"]=$username;

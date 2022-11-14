@@ -38,6 +38,11 @@ table {
 
 }
 
+label{
+  color: rgb(255, 255, 255);
+
+}
+
 /* sign up*/
 a{
   color: rgb(255, 255, 255);
@@ -172,7 +177,6 @@ div.content {
   margin-left: 0;
   border: 3px solid  rgb(10, 58, 78);
   background-color:  rgb(10, 58, 78);
-  color: white;
 }
 .field{
   width: 30%;

@@ -22,7 +22,6 @@ include "./sql_connection/sql_connection.php";
     <div class="box text-center">
         <div class="search">
             <form method="GET">
-                <!-- ex form method="GET" action="welcome.php"> it sends the data in the .php page  -->
                 <label for="username">Username:</label><br>
                 <input type="text" id="username" name="username"><br>
                 <label for="password">password:</label><br>
