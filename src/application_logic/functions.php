@@ -204,7 +204,7 @@ function change_user($ID, $field_to_change, $value, $con){
     $sql = "UPDATE users SET $field_to_change='$value' WHERE ID='$ID'" ;
     $res=mysqli_query($con, $sql);
     ?><script>
-        window.location.replace("./admin.php");
+        window.location.replace("./administration.php");
     </script><?php
 }
 
@@ -240,16 +240,6 @@ function  go_to_update_product_sql($id){
     $_SESSION["product_id"]=$id;
     ?><script>window.location.replace("./update_product_sql.php");</script><?php    
 
-}
-
-function update_product_sql($id, $con,$name,$code,$price,$date,$category){
-    $sql = "UPDATE `products` SET Name='$name', ProductCode='$code', Price='$price'
-                , DateOfWithdrawal='$date', Category='$category'
-            WHERE  ID='$id'";
-    $res=mysqli_query($con, $sql);
-    ?><script>
-        window.location.replace("./seller.php");
-    </script><?php
 }
 
 function update_product($product_id, $field_to_change, $value, $con){
