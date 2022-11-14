@@ -3,6 +3,12 @@ session_start();
 
 
 //sign_up.php
+/**
+ * method that creates new users
+ * input: take the necessarily arguments,
+ *      check if any user has the same username,
+ *      and push it to the database
+ */
 function sign_up_sql($name, $surname,
                      $username, $password, $email, $role,$con){
     
@@ -14,11 +20,15 @@ function sign_up_sql($name, $surname,
     $sql = "INSERT INTO `users` (`Name`, `Surname`, `Username`, `Password`, `Email`, `Role`, `Confirmed`) 
         VALUES ('$name', '$surname', '$username', '$password', '$email', '$role', '0')";
     $res=mysqli_query($con, $sql);
-    ?><script>window.location.replace("./index.php");</script><?php
+    ?><script>window.location.replace("./index.php");</script><?php //relocation using js
     return;
 
 }
 //index.php
+/**
+ * simple check using the db 
+ * and relocate into the main webpage
+ */
 function log_in_sql($username, $password,$con){
     $sql = "select * from users WHERE Password=$password and Username='$username'";
     $res=mysqli_query($con, $sql);
@@ -48,6 +58,18 @@ function same_username_sql($con, $username){
     return false;
 }
 //admin.php
+/**
+ * print all the users,
+ * and the necessarily buttons, 
+ * update confirm, update user, delete user
+ *  without ajax
+ * 
+ * First function, just communicates
+ * with the db
+ * 
+ * Second Function, prints 
+ * every user and the buttons
+ */
 function print_users_sql($con){
     $sql = "select * from users ";
     $res=mysqli_query($con, $sql);
@@ -89,7 +111,14 @@ function print_single_user_sql($row, $i,$con){
     if(array_key_exists('delete_button_'.$i, $_POST)) delete_sql($row["ID"],$con);
     echo "</tr>";
 }
-
+/**
+ * same as the previous
+ * but with ajax 
+ * 
+ * ajax, asks a request in the ajax_function.php.
+ * That page, calls the above functions and waits 
+ * for the answer
+ */
 function print_users_ajax_sql($con){
     $sql = "select * from users ";
     $res=mysqli_query($con, $sql);
@@ -189,7 +218,9 @@ function print_single_user_ajax_sql($row, $tmp_id,$con){
     
 }
 
-
+/**
+ * listeners buttons for the buttons
+ */
 function update_confirmed_sql($ID, $con){
     $sql = "UPDATE users SET confirmed=1 WHERE ID='$ID'" ;
     $res=mysqli_query($con, $sql);
@@ -226,6 +257,9 @@ function return_to_welcome(){
 }
 
 //seller.php
+/**
+ * just pushes in the db
+ */
 
 function add_product_sql($seller, $name,$code, $date,
                             $price,$category,$con){
@@ -241,6 +275,10 @@ function  go_to_update_product_sql($id){
     ?><script>window.location.replace("./update_product_sql.php");</script><?php    
 
 }
+/**
+ * update a product with given 
+ * product id
+ */
 
 function update_product($product_id, $field_to_change, $value, $con){
     $sql = "UPDATE `products` SET $field_to_change='$value'
@@ -251,6 +289,9 @@ function update_product($product_id, $field_to_change, $value, $con){
     </script><?php
 }
 
+/**
+ * select * from products where sellername=this seller
+ */
 function print_sellers_products_sql($creator,$con){
     $sql = "select * from products where  SellerName='$creator'";
     $res=mysqli_query($con, $sql);
@@ -270,6 +311,10 @@ function print_sellers_products_sql($creator,$con){
     echo "</table>";
 }
 
+/**
+ * print every previously mentioned product and
+ * the dynamically buttons 
+ */
 function print_single_product_sql($row, $i,$con){
     echo "<tr>";
     echo "<th class=\"normal_th\">".$row["Name"]."</th>";
@@ -297,6 +342,10 @@ function print_single_product_sql($row, $i,$con){
     if(array_key_exists('delete_product_button_'.$i, $_POST)) delete_product_sql($row["ID"],$con);
     echo "</tr>";
 }
+/**
+ * delete a product with given 
+ * product id
+ */
 
 function delete_product_sql($id,$con){
     $sql = "DELETE FROM products WHERE ID='$id'" ;
@@ -304,6 +353,11 @@ function delete_product_sql($id,$con){
 }
 
 // ajax/sellers
+/**
+ * same as above but in ajax
+ * ajax was implemented as it
+ * was mentioned prevously
+ */
 function print_sellers_products_sql_ajax($creator,$con){
     $sql = "select * from products where  SellerName='$creator'";
     $res=mysqli_query($con, $sql);
@@ -373,9 +427,17 @@ function print_single_product_sql_ajax($row, $i,$con){
     echo "</tr>";
     
 }
-
-
 //products.php
+/**
+ * there was no need for ajax in products 
+ * because the only functionality is the
+ * "add to cart" that can happens in the 
+ * "background"
+ */
+
+/**
+ * select * from products
+ */
 function print_all_products_sql($con, $user_id){
     $sql = "select * from products";
     $res=mysqli_query($con, $sql);
@@ -395,7 +457,9 @@ function print_all_products_sql($con, $user_id){
     }
     echo "</table>";
 }
-
+/**
+ * print every product
+ */
 function print_single_product_user_sql($row,$i,$con, $user_id){
     echo "<tr>";
     echo "<th class=\"normal_th\">".$row["Name"]."</th>";
@@ -413,6 +477,9 @@ function print_single_product_user_sql($row,$i,$con, $user_id){
     if(array_key_exists('cart_button_'.$i, $_POST)) add_to_cart_sql($row,$con,$user_id);
     echo "</tr>";
 }
+/**
+ * insert into cart (product, user's cart, date that was added)
+ */
 
 function add_to_cart_sql($row,$con, $user_id){
     $product_id=(int)$row["ID"];
@@ -452,7 +519,9 @@ function search_product_by_specific_attribute_sql($attribute,$attribute_value,$c
 
 
 //cart.php
-
+/**
+ * select * from cart where user_id=this user
+ */
 
 function print_cart($user_id,$con){
     $sql = "SELECT * from carts where User_id='$user_id' ";
@@ -478,6 +547,10 @@ function print_cart($user_id,$con){
     echo "total cost is ".   $_SESSION['totCost']."$ <br>" ;
 }
 
+/**
+ * print single prodcut from cart and the button
+ * (not in ajax)
+ */
 function print_single_cart_user_sql($row,$i,$con){
     $cart_id=$row["ID"];
     $product_id=$row["Product_id"];
@@ -510,6 +583,9 @@ function print_single_cart_user_sql($row,$i,$con){
 
 
 // cart/ajax version
+/**
+ * select * from cart where user_id=this user
+ */
 function print_cart_ajax($user_id,$con){
     $sql = "SELECT * from carts where User_id='$user_id' ";
     $res=mysqli_query($con, $sql);
@@ -557,7 +633,10 @@ function print_cart_ajax($user_id,$con){
     <?php
     
 }
-
+/**
+ * print single prodcut from cart and the button
+ * (ajax)
+ */
 function print_single_cart_user_sql_ajax($row, $i,$con){
     $cart_id=$row["ID"];
     $product_id=$row["Product_id"];
@@ -586,6 +665,10 @@ function print_single_cart_user_sql_ajax($row, $i,$con){
     return $row["Price"];
 }
 
+/**
+ * listeners to the buttons
+ * (either synchronous or asynchronous ) 
+ */
 function delete_from_cart_sql($cart_id,$con){
     $sql = "DELETE FROM carts WHERE ID='$cart_id'";
     $res=mysqli_query($con, $sql);
@@ -608,7 +691,10 @@ function loged_in_user(){
 function back_to_index(){
     ?><script>window.location.replace("./index.php");</script><?php
 }
-
+/**
+ * an conversion from 
+ * js alert to a php alert
+ */
 function alert($string){
     ?><script> alert("<?php echo $string ?>");</script><?php
 }
