@@ -402,7 +402,7 @@ function print_single_product_user_sql($row,$i,$con, $user_id){
     echo "<th class=\"normal_th\">".$row["ProductCode"]."</th>";
     echo "<th class=\"normal_th\">".$row["Price"]."</th>";
     echo "<th class=\"normal_th\">".$row["DateOfWithdrawal"]."</th>";
-    ?><!-- button in order to upadte confirm and delete-->
+    ?>
     <th class="normal_th">
     <form  method="post">
         <input class="button" type="submit" value="Add to Cart" 
@@ -421,15 +421,16 @@ function add_to_cart_sql($row,$con, $user_id){
         VALUES (NULL, '$user_id', '$product_id', '$date');";
     
     $res=mysqli_query($con, $sql);
+    
 
 }
 
-function search_product_by_productName_sql($productName,$con, $user_id){
-    $sql = "select * from products where  Name='$productName'";
+function search_product_by_specific_attribute_sql($attribute,$attribute_value,$con, $user_id){
+    $sql = "select * from products where  $attribute='$attribute_value'";
     $res=mysqli_query($con, $sql);
 
     if($res->num_rows==0){
-        echo "there is no produxt with that name :(";
+        echo "there is no product with that specification :(";
         return ;
     }
     echo "<table>";
@@ -449,98 +450,6 @@ function search_product_by_productName_sql($productName,$con, $user_id){
     
 }
 
-function search_product_by_sellerName_sql($sellerName,$con, $user_id){
-    
-    $sql = "select * from products where  SellerName='$sellerName'";
-    $res=mysqli_query($con, $sql);
-    echo "<table>";
-    ?>
-    <tr class="header_line">
-        <th>Name</th>
-        <th>Product Code</th>
-        <th>Price</th>
-        <th>Date Of Withdrawal</th>
-    </tr>
-    <?php
-    for($i=0; $i<$res->num_rows; $i++){
-        $row=$res->fetch_assoc();
-        print_single_product_user_sql($row, $i,$con, $user_id);
-    }
-    echo "</table>";
-
-}
-
-function search_product_by_category_sql($category,$con, $user_id){
-    $sql = "select * from products where  Category='$category'";
-    $res=mysqli_query($con, $sql);
-
-    if($res->num_rows==0){
-        echo "there are no products in this category";
-        return ;
-    }
-    echo "<table>";
-    ?>
-    <tr class="header_line">
-        <th>Name</th>
-        <th>Product Code</th>
-        <th>Price</th>
-        <th>Date Of Withdrawal</th>
-    </tr>
-    <?php
-    for($i=0; $i<$res->num_rows; $i++){
-        $row=$res->fetch_assoc();
-        print_single_product_user_sql($row, $i,$con, $user_id);
-    }
-    echo "</table>";
-}
-
-function search_product_by_date_sql($date,$con, $user_id){
-    $sql = "select * from products where  DateOfWithdrawal='$date'";
-    $res=mysqli_query($con, $sql);
-
-    if($res->num_rows==0){
-        echo "there are no products with this DateOfWithdrawal";
-        return ;
-    }
-    echo "<table>";
-    ?>
-    <tr class="header_line">
-        <th>Name</th>
-        <th>Product Code</th>
-        <th>Price</th>
-        <th>Date Of Withdrawal</th>
-    </tr>
-    <?php
-    for($i=0; $i<$res->num_rows; $i++){
-        $row=$res->fetch_assoc();
-        print_single_product_user_sql($row, $i,$con, $user_id);
-    }
-    echo "</table>";
-}
-
-function search_product_by_title_sql($title,$con, $user_id){
-    $sql = "select * from products where  Title='$title'";
-    $res=mysqli_query($con, $sql);
-
-    if($res->num_rows==0){
-        echo "there are no product with this title";
-        return ;
-    }
-    echo "<table>";
-    ?>
-    <tr class="header_line">
-        <th>Name</th>
-        <th>Product Code</th>
-        <th>Price</th>
-        <th>Date Of Withdrawal</th>
-    </tr>
-    <?php
-    for($i=0; $i<$res->num_rows; $i++){
-        $row=$res->fetch_assoc();
-        print_single_product_user_sql($row, $i,$con, $user_id);
-    }
-    echo "</table>";
-}
 
 //cart.php
 
