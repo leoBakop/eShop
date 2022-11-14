@@ -67,6 +67,27 @@ function print_users_sql($con){
     echo "</table>";
 
 }
+function print_single_user_sql($row, $i,$con){
+
+    echo "<tr>";
+    echo "<th class=\"normal_th\">".$row["Username"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Email"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Role"]."</th>";
+    echo "<th class=\"normal_th\">".$row["Confirmed"]."</th>";
+    ?><!-- button in order to upadte confirm and delete-->
+    <th class="normal_th">
+    <form  method="post">
+        <input type="submit" value="Update Confirmed" 
+               name="confirmed_button<?php echo "_$i"; ?>" class="button"/> <!-- $i in order to create different buttons and listeners for every row -->
+        <input type="submit" value="Delete User" 
+               name="delete_button<?php echo "_$i"; ?>" class="button"/> 
+    </form>
+    </th>
+    <?php
+    if(array_key_exists('confirmed_button_'.$i, $_POST)) update_confirmed_sql($row["ID"],$con);
+    if(array_key_exists('delete_button_'.$i, $_POST)) delete_sql($row["ID"],$con);
+    echo "</tr>";
+}
 
 function print_users_ajax_sql($con){
     $sql = "select * from users ";
@@ -87,8 +108,9 @@ function print_users_ajax_sql($con){
     for($i=0; $i<$res->num_rows; $i++){
         
         $row=$res->fetch_assoc();
-        print_single_user_ajax_sql($row, $i,$con);
         $tmp_id=$row["ID"];
+        print_single_user_ajax_sql($row, $tmp_id,$con);
+        
         echo (
             "<th class=\"normal_th\">
         
@@ -96,15 +118,16 @@ function print_users_ajax_sql($con){
             </th>
             <th class=\"normal_th\">
             <button class=\"button\" type=\"button\" onclick=\"delete_user($tmp_id)\"> delete</button> 
-    
-            </th>
             </tr>
+            </th>
             "
         );
         
     
     }
     echo "</table>";
+
+    
     ?>
     
     <script src="./application_logic/jquery-3.6.1.js"></script>
@@ -141,7 +164,7 @@ function print_users_ajax_sql($con){
 
 }
 
-function print_single_user_ajax_sql($row, $i,$con){
+function print_single_user_ajax_sql($row, $tmp_id,$con){
     $tmp_id=$row["ID"];
     echo "<tr id=all$tmp_id>";
     echo "<th class=\"normal_th\">".$row["Username"]."</th>";
@@ -149,30 +172,20 @@ function print_single_user_ajax_sql($row, $i,$con){
     echo "<th class=\"normal_th\">".$row["Role"]."</th>";
     echo "<th class=\"normal_th\"><div id=$tmp_id >".$row["Confirmed"]."</div></th>";
     
-    
-}
-
-
-function print_single_user_sql($row, $i,$con){
-
-    echo "<tr>";
-    echo "<th class=\"normal_th\">".$row["Username"]."</th>";
-    echo "<th class=\"normal_th\">".$row["Email"]."</th>";
-    echo "<th class=\"normal_th\">".$row["Role"]."</th>";
-    echo "<th class=\"normal_th\">".$row["Confirmed"]."</th>";
-    ?><!-- button in order to upadte confirm and delete-->
-    <th class="normal_th">
-    <form  method="post">
-        <input type="submit" value="Update Confirmed" 
-               name="confirmed_button<?php echo "_$i"; ?>" class="button"/> <!-- $i in order to create different buttons and listeners for every row -->
-        <input type="submit" value="Delete User" 
-               name="delete_button<?php echo "_$i"; ?>" class="button"/> 
-    </form>
+    echo "<form method=\"GET\"> 
+    <th class=\"normal_th\">
+    <button class=\"button\" type=\"sumbit\" name=\"change_user_$tmp_id\"> change user</button> 
     </th>
-    <?php
-    if(array_key_exists('confirmed_button_'.$i, $_POST)) update_confirmed_sql($row["ID"],$con);
-    if(array_key_exists('delete_button_'.$i, $_POST)) delete_sql($row["ID"],$con);
-    echo "</tr>";
+    </form>";
+
+    //listeners
+
+    if(array_key_exists('change_user_'.$tmp_id, $_GET)){
+        $_SESSION['tmp_user_id']=$tmp_id;
+        ?><script>window.location.replace("update_user.php")</script><?php
+    }
+    
+    
 }
 
 
@@ -183,6 +196,11 @@ function update_confirmed_sql($ID, $con){
 
 function delete_sql($ID,$con){
     $sql = "DELETE FROM users WHERE ID='$ID'" ;
+    $res=mysqli_query($con, $sql);
+}
+
+function change_user($ID, $field_to_change, $value, $con){
+    $sql = "UPDATE users SET $field_to_change='$value' WHERE ID='$ID'" ;
     $res=mysqli_query($con, $sql);
 }
 

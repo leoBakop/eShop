@@ -27,7 +27,7 @@ include "./sql_connection/sql_connection.php";
                 <input type="text" id="username" name="username"><br>
                 <label for="password">password:</label><br>
                 <input type="password" id="password" name="password"><br><br>
-                <input type="submit" name="login" value="login">
+                <input type="submit" name="login" value="login" class="button">
             </form>
             <br>
         </div>

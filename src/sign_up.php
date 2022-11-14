@@ -57,7 +57,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
     ?>
 
-    <a href="index.php">not sure? return to index</a>
+    <a  href="index.php">not sure? return to index</a>
 
 </body>
 
