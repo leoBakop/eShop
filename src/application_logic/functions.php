@@ -203,6 +203,9 @@ function delete_sql($ID,$con){
 function change_user($ID, $field_to_change, $value, $con){
     $sql = "UPDATE users SET $field_to_change='$value' WHERE ID='$ID'" ;
     $res=mysqli_query($con, $sql);
+    ?><script>
+        window.location.replace("./admin.php");
+    </script><?php
 }
 
 //welcome.php
@@ -245,7 +248,15 @@ function update_product_sql($id, $con,$name,$code,$price,$date,$category){
             WHERE  ID='$id'";
     $res=mysqli_query($con, $sql);
     ?><script>
-        alert("concert was updated succesfully");
+        window.location.replace("./seller.php");
+    </script><?php
+}
+
+function update_product($product_id, $field_to_change, $value, $con){
+    $sql = "UPDATE `products` SET $field_to_change='$value'
+        WHERE  ID='$product_id'";
+    $res=mysqli_query($con, $sql);
+    ?><script>
         window.location.replace("./seller.php");
     </script><?php
 }

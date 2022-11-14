@@ -21,33 +21,101 @@ if (!loged_in_user()) back_to_index();
 
 <body>
     <form method="GET" class="search">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name"><br>
-        <label for="date">Date of withdrawal(YYYY-MM-DD):</label><br>
-        <input type="text" id="date" name="date"><br>
-        <label for="productCode">product code:</label><br>
-        <input type="text" id="productCode" name="productCode"><br>
-        <label for="price">price:</label><br>
-        <input type="text" id="price" name="price"><br>
-        <label for="category">Category:</label><br>
-        <input type="text" id="category" name="category"><br>
+            <label for="changes">What would you like to update</label>
+            <select name="changes">
+                <option value="Name">Name</option>
+                <option value="Price">Price</option>
+                <option value="ProductCode">Product Code</option>
+                <option value="DateOfWithdrawal">DateOfWithdrawal</option>
+                <option value="Category">Category</option>
 
+            </select>
         <input type="submit" name="update" value="update product">
     </form>
 
     <?php
-    if (array_key_exists('update', $_GET))
-        update_product_sql(
-            $_SESSION["product_id"],
-            $con,
-            $_GET["name"],
-            $_GET['productCode'],
-            $_GET['price'],
-            $_GET['date'],
-            $_GET['category']
-        );
+        if(array_key_exists('update', $_GET)){
+            if ($_GET['changes'] == "Name") {
+            ?>
+                <form method="post">
+                    <label for="Name">name:</label><br>
+                    <input type="text" id="Name" name="Name"><br>
+                    <input type="submit" name="change_name" value="Change Name">
+                </form>
 
-    ?>
+            <?php
+                if (array_key_exists('change_name', $_POST)) update_product(
+                    $_SESSION['product_id'],
+                    "Name",
+                    $_POST['Name'],
+                    $con
+                );
+            }elseif($_GET['changes'] == "Price") {
+            ?>
+                <form method="post">
+                    <label for="Price">Price:</label><br>
+                    <input type="text" id="Price" name="Price"><br>
+                    <input type="submit" name="change_price" value="Change Price">
+                </form>
+            <?php
+                if (array_key_exists('change_price', $_POST)) update_product(
+                    $_SESSION['product_id'],
+                    "Price",
+                    $_POST['Price'],
+                    $con
+                );
+            }elseif($_GET['changes']=="ProductCode"){
+            ?>
+                <form method="post">
+                    <label for="ProductCode">New ProductCode:</label><br>
+                    <input type="text" id="ProductCode" name="ProductCode"><br>
+                    <input type="submit" name="change_ProductCode" value="Change ProductCode">
+                </form>
+
+            <?php
+                if (array_key_exists('change_ProductCode', $_POST)) update_product(
+                    $_SESSION['product_id'],
+                    "ProductCode",
+                    $_POST['ProductCode'],
+                    $con
+                );
+            }elseif($_GET['changes']=="DateOfWithdrawal"){
+                ?>
+                    <form method="post">
+                        <label for="DateOfWithdrawal">New DateOfWithdrawal:</label><br>
+                        <input type="text" id="DateOfWithdrawal" name="DateOfWithdrawal"><br>
+                        <input type="submit" name="change_DateOfWithdrawal" value="Change DateOfWithdrawal">
+                    </form>
+    
+                <?php
+                    if (array_key_exists('change_DateOfWithdrawal', $_POST)) update_product(
+                        $_SESSION['product_id'],
+                        "DateOfWithdrawal",
+                        $_POST['DateOfWithdrawal'],
+                        $con
+                    );
+                }elseif($_GET['changes']=="Category"){
+                    ?>
+                        <form method="post">
+                            <label for="Category">New Category:</label><br>
+                            <input type="text" id="Category" name="Category"><br>
+                            <input type="submit" name="change_Category" value="Change Category">
+                        </form>
+        
+                    <?php
+                        if (array_key_exists('change_Category', $_POST)) update_product(
+                            $_SESSION['product_id'],
+                            "Category",
+                            $_POST['Category'],
+                            $con
+                        );
+                    }
+        }
+        ?>
+    </div>
+
+    <br>
+    <button class="button" onclick="go_to_welcome()">back </button>
 
 </body>
 
