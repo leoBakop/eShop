@@ -38,7 +38,6 @@ include "./sql_connection/sql_connection.php";
 
     <?php
     if (array_key_exists('login', $_GET)) log_in_sql($_GET['username'], $_GET['password'], $con);
-    //if(array_key_exists('login', $_GET)) log_in_mongodb($_GET['username'], $_GET['password']);
     
     ?>
 
