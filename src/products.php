@@ -19,6 +19,18 @@ if (!loged_in_user()) back_to_index();
 </head>
 
 <body>
+    <div class="welcome_info ">
+        <div class="log_out_btn button">
+            <form method="post">
+                <input type="submit" value="Log out" name="log_out_button" class="button" />
+            </form>
+        </div>
+
+
+        <div class="user">
+            <?php echo $_SESSION["Username"] . " (" . $_SESSION["Role"] . ")"  ?>
+        </div>
+    </div>
 
     <form method="POST" class="search">
             <label for="changes">Search using</label>
@@ -26,6 +38,7 @@ if (!loged_in_user()) back_to_index();
                 <option value="Name">Product Name</option>
                 <option value="SellerName">Seller Name</option>
                 <option value="DateOfWithdrawal">DateOfWithdrawal</option>
+                <option value="ProductCode">Product Code</option>
                 <option value="Category">Category</option>
             </select>
             <label for="search">Insert the key:</label>
@@ -46,13 +59,19 @@ if (!loged_in_user()) back_to_index();
     }else{
         print_all_products_sql($con, $_SESSION['User_id']);
     }
+
+    
     ?>
 
 
 
     
-    <button class="button" onclick="go_to_welcome()">back </button>
-    <button class="button" onclick="go_to_cart()">cart </button>
+    <button class="button" onclick="go_to_welcome()">Back </button>
+    <button class="button" onclick="go_to_cart()">Cart </button>
+    <?php
+    if (array_key_exists('log_out_button', $_POST)) log_out_function();
+    ?>
+
 
 
 </body>

@@ -14,15 +14,15 @@ if (!loged_in_user()) back_to_index();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./javaScript/basic_functionality.js"></script>
-    <title>Add concert</title>
+    <title>Add Product!</title>
 </head>
 
 <body>
     <form method="GET" class="search">
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name"><br>
-        <label for="date">Date of withdrawal(YYYY-MM-DD):</label><br>
-        <input type="text" id="date" name="date"><br>
+        <label for="date">Date of withdrawal:</label><br>
+        <input type="date" id="date" name="date"><br>
         <label for="productCode">product code:</label><br>
         <input type="text" id="productCode" name="productCode"><br>
         <label for="price">price:</label><br>
@@ -43,7 +43,7 @@ if (!loged_in_user()) back_to_index();
         $con
     );
     ?>
-
+<button class="button" onclick="go_to_welcome()">Back </button>
 </body>
 
 </html>

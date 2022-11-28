@@ -40,7 +40,6 @@ table {
 
 label{
   color: rgb(255, 255, 255);
-
 }
 
 /* sign up*/
@@ -73,9 +72,20 @@ a{
 .log_out_btn {
   float: right;
   background-color:  rgb(10, 58, 78);
+  
 }
 
 .user {
+  padding: 18px 20px;
+  text-align: center;
+  font-size: large;
+  height: 23px;
+  color: rgb(255, 252, 252);
+  background-color:  rgb(10, 58, 78);
+  float: left;
+}
+
+.user_welcome {
   padding: 18px 20px;
   text-align: center;
   font-size: large;
@@ -84,6 +94,7 @@ a{
   background-color:  rgb(10, 58, 78);
   float: left;
 }
+
 
 
 /* The side navigation menu */
@@ -186,6 +197,7 @@ div.content {
 
 .not_authorized{
   background-color:  rgb(10, 58, 78);
+  color:beige;
   float: left;
   width:20%;
 

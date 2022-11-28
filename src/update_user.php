@@ -13,7 +13,7 @@ include "application_logic/functions.php";
     <script src="javaScript/basic_functionality.js"></script>
     <link rel="stylesheet" href="./style.css">
 
-    <title>update user</title>
+    <title>Update User</title>
 </head>
 
 <body>
@@ -101,7 +101,7 @@ include "application_logic/functions.php";
     </div>
 
     <br>
-    <button class="button" onclick="go_to_welcome()">back </button>
+    <button class="button" onclick="go_to_welcome()">Back </button>
 </body>
 
 </html>

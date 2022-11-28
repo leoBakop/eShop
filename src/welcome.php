@@ -37,7 +37,7 @@ if (!loged_in_user()) back_to_index();
 
     </div>
 
-    <div class="welcome_info ">
+    <div class="welcome_info" >
         <div class="log_out_btn button">
             <form method="post">
                 <input type="submit" value="Log out" name="log_out_button" class="button" />
@@ -45,7 +45,7 @@ if (!loged_in_user()) back_to_index();
         </div>
 
 
-        <div class="user">
+        <div class="user_welcome">
 
             <?php echo $_SESSION["Username"] . " (" . $_SESSION["Role"] . ")"  ?>
         </div>

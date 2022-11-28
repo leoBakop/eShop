@@ -25,11 +25,30 @@ if (!loged_in_user()) back_to_index();
     if (strcmp($_SESSION["Role"], "Admin") != 0) go_to_error();
     //print_users_sql($con);
     ?>
-    <div class="table"  style="overflow-y:scroll;" >
-        <?php print_users_ajax_sql($con);?>
+    <div class="welcome_info ">
+        <div class="log_out_btn button">
+            <form method="post">
+                <input type="submit" value="Log out" name="log_out_button" class="button" />
+            </form>
+        </div>
+
+
+        <div class="user">
+
+            <?php echo $_SESSION["Username"] . " (" . $_SESSION["Role"] . ")"  ?>
+        </div>
+    </div>
+    <div class="table">
+        <?php print_users_ajax_sql($con);
+            //print_users_sql($con);
+        ?>
     </div>
 
-    <button class="button" onclick="go_to_welcome()">back </button>
+    <button class="button" onclick="go_to_welcome()">Back </button>
+    <?php
+    if (array_key_exists('log_out_button', $_POST)) log_out_function();
+    ?>
+
 
 </body>
 </body>
