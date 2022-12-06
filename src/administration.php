@@ -38,13 +38,15 @@ if (!loged_in_user()) back_to_index();
             <?php echo $_SESSION["Username"] . " (" . $_SESSION["Role"] . ")"  ?>
         </div>
     </div>
+
+    <button class="button" onclick="go_to_welcome()">Back </button>
+
     <div class="table">
         <?php print_users_ajax_sql($con);
             //print_users_sql($con);
         ?>
     </div>
 
-    <button class="button" onclick="go_to_welcome()">Back </button>
     <?php
     if (array_key_exists('log_out_button', $_POST)) log_out_function();
     ?>

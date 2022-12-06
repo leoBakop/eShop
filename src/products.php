@@ -47,7 +47,8 @@ if (!loged_in_user()) back_to_index();
             <input type="submit" name="print_all" value="print all" class="button">
 
     </form>
-
+    <button class="button" onclick="go_to_welcome()">Back </button>
+    <button class="button" onclick="go_to_cart()">Cart </button>
 
 
     <?php
@@ -66,8 +67,7 @@ if (!loged_in_user()) back_to_index();
 
 
     
-    <button class="button" onclick="go_to_welcome()">Back </button>
-    <button class="button" onclick="go_to_cart()">Cart </button>
+    
     <?php
     if (array_key_exists('log_out_button', $_POST)) log_out_function();
     ?>

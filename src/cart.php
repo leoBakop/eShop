@@ -32,11 +32,12 @@ if (!loged_in_user()) back_to_index();
             <?php echo $_SESSION["Username"] . " (" . $_SESSION["Role"] . ")"  ?>
         </div>
     </div>
+    <button class="button" onclick="go_to_welcome()">Back </button>
     <?php
     print_cart_ajax($_SESSION["User_id"], $con);
     ?>
     <br><br><br>
-    <button class="button" onclick="go_to_welcome()">Back </button>
+    
 
     <?php
     if (array_key_exists('log_out_button', $_POST)) log_out_function();
