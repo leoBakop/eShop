@@ -1,0 +1,75 @@
+version: '3.3'
+services:
+    app-apache:
+        container_name: app-logic
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        depends_on:
+            - mysql_db
+        volumes:
+            - ./src:/var/www/html/
+        networks:
+             intranet1:
+                ipv4_address: 10.1.2.2
+        ports:
+            - 80:80
+   
+    keyrock:
+        image: fiware/idm:7.8.1
+        container_name: keyrock
+        hostname: keyrock
+        depends_on: 
+           - mysql_db
+        ports:
+           - 3005:3005
+           - 443:443
+        networks:
+          intranet1:
+           ipv4_address: 10.1.2.5
+        environment:
+           - IDM_DB_HOST=mysql_db
+           - IDM_DB_USER=keyrock
+           - IDM_DB_PASS=keyrock
+           - IDM_HOST=http://localhost:3005
+           - IDM_PORT=3005
+           - IDM_ADMIN_USER=admin
+           - IDM_ADMIN_EMAIL=l@tuc.gr
+           - IDM_ADMIN_PASS=admin
+  
+    mysql_db:
+        container_name: mysql_db        
+        hostname: mysql_db
+        image: mysql:5.7
+        restart: always
+        expose:
+          - "3306"
+        ports:
+          - "3306:3306"
+        volumes:
+            - ./mysql_data:/var/lib/mysql
+        environment:
+          - "MYSQL_ROOT_PASSWORD= secret"
+          - "MYSQL_ROOT_HOST= 10.1.2.5"
+        networks:
+           intranet1:
+              ipv4_address: 10.1.2.6
+              
+    phpmyadmin:
+        container_name: sql-admin
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - '8080:80'
+        restart: always
+        environment:
+          PMA_HOST: mysql_db
+        depends_on:
+            - mysql_db
+        networks:
+           intranet1:
+              ipv4_address: 10.1.2.9
+networks:
+    intranet1:
+      ipam:
+        config:
+          - subnet: 10.1.2.0/24

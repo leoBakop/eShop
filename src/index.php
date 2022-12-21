@@ -1,7 +1,7 @@
 <?php
 include "./application_logic/functions.php";
+include  "./application_logic/sp_functions.php";
 include "./sql_connection/sql_connection.php";
-
 
 ?>
 <!DOCTYPE html>
@@ -22,9 +22,9 @@ include "./sql_connection/sql_connection.php";
     <div class="box text-center">
         <div class="search">
             <form method="GET">
-                <label for="username">Username:</label><br>
-                <input type="text" id="username" name="username"><br>
-                <label for="password">password:</label><br>
+                <label for="email">Email:</label><br>
+                <input type="text" id="email" name="email"><br>
+                <label for="password">Password:</label><br>
                 <input type="password" id="password" name="password"><br><br>
                 <input type="submit" name="login" value="login" class="button">
             </form>
@@ -37,8 +37,8 @@ include "./sql_connection/sql_connection.php";
 
 
     <?php
-    if (array_key_exists('login', $_GET)) log_in_sql($_GET['username'], $_GET['password'], $con);
-    
+    //if (array_key_exists('login', $_GET)) log_in_sql($_GET['username'], $_GET['password'], $con);
+    if (array_key_exists('login', $_GET)) sp_login($_GET['email'], $_GET['password'], $con);
     ?>
 
 

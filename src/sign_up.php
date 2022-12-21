@@ -1,5 +1,6 @@
 <?php
 include './application_logic/functions.php';
+include './application_logic/sp_functions.php';
 include 'sql_connection/sql_connection.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 
@@ -13,6 +14,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./javaScript/basic_functionality.js"> </script>
     <title>sign_up</title>
 </head>
 
@@ -41,11 +43,21 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
         <input type="submit" name="sign_up" value="Become a member">
     </form>
-
+    <button class="button" onclick="go_to_welcome()">Back </button>
     <?php
 
     if (array_key_exists('sign_up', $_GET))
-        sign_up_sql(
+    /* sign_up_sql(
+        $_GET["name"],
+        $_GET["surname"],
+        $_GET["username"],
+        $_GET["password"],
+        $_GET["email"],
+        $_GET["role"],
+        $con
+        );
+ */     
+        sp_signup(
             $_GET["name"],
             $_GET["surname"],
             $_GET["username"],
