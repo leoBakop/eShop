@@ -1,5 +1,6 @@
 <?php
 include "./application_logic/functions.php";
+include "./application_logic/sp_functions.php";
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!loged_in_user()) back_to_index();
 
@@ -54,6 +55,7 @@ if (!loged_in_user()) back_to_index();
 
 
     <?php
+    sp_print_all_products();
     if (array_key_exists('log_out_button', $_POST)) log_out_function();
     ?>
 

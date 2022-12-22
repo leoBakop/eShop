@@ -54,6 +54,60 @@ services:
         networks:
            intranet1:
               ipv4_address: 10.1.2.6
+    data-storage:
+        container_name: data-storage
+        hostname: data-storage
+        build:
+          context: ./
+          dockerfile: Dockerfile_mongo
+        
+        networks:
+           intranet1:
+              ipv4_address: 10.1.2.3
+        expose:
+          - 80
+    mongo:
+        image: mongo:latest
+        container_name: mongodb
+        restart: always
+        volumes:
+           - ./mongodb_data:/data/db
+        environment:
+           MONGO_INITDB_ROOT_USERNAME: admin
+           MONGO_INITDB_ROOT_PASSWORD: admin
+        ports: 
+           - 27018:27017
+        expose:
+           - 27017
+        networks:
+            intranet1:
+               ipv4_address: 10.1.2.7
+    dss-proxy:
+        image: fiware/pep-proxy
+        container_name: dss-proxy
+        hostname: dss-proxy
+        networks:
+            intranet1:
+              ipv4_address: 10.1.2.4
+        ports:
+          - 4001:4001
+        expose:
+          - 4001
+        depends_on:
+          - keyrock
+        environment:
+          - PEP_PROXY_APP_HOST=dss-core
+          - PEP_PROXY_APP_PORT=80
+          - PEP_PROXY_PORT=4001
+          - PEP_PROXY_IDM_HOST=keyrock
+          - PEP_PROXY_HTTPS_ENABLED=false
+          - PEP_PROXY_AUTH_ENABLED=false
+          - PEP_PROXY_IDM_SSL_ENABLED=false
+          - PEP_PROXY_IDM_PORT=3005
+          - PEP_PROXY_APP_ID=803f4f84-c658-4c56-88bd-cebedf07eb24
+          - PEP_PROXY_USERNAME=pep_proxy_f49e9df7-e0c4-46a8-bb3b-bb9305fc4e8e
+          - PEP_PASSWORD=pep_proxy_a16411d8-7512-4395-bf49-3e0b373175f6
+          - PEP_PROXY_PDP=idm
               
     phpmyadmin:
         container_name: sql-admin
