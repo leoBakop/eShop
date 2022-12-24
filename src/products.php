@@ -1,6 +1,7 @@
 <?php
 include "./application_logic/functions.php";
 include "./sql_connection/sql_connection.php";
+include "./application_logic/sp_functions.php";
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!loged_in_user()) back_to_index();
 ?>
@@ -12,7 +13,7 @@ if (!loged_in_user()) back_to_index();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart</title>
+    <title>Products</title>
     <script src="./javaScript/basic_functionality.js"></script>
 
 
@@ -58,7 +59,7 @@ if (!loged_in_user()) back_to_index();
     }elseif(array_key_exists('print_all', $_POST)){
         print_all_products_sql($con, $_SESSION['User_id']);
     }else{
-        print_all_products_sql($con, $_SESSION['User_id']);
+        sp_print_all_products($con, $_SESSION['User_id']);
     }
 
     

@@ -82,10 +82,10 @@ services:
         networks:
             intranet1:
                ipv4_address: 10.1.2.7
-    dss-proxy:
+    data-storage-proxy:
         image: fiware/pep-proxy
-        container_name: dss-proxy
-        hostname: dss-proxy
+        container_name: data-storage-proxy
+        hostname: data-storage-proxy
         networks:
             intranet1:
               ipv4_address: 10.1.2.4
@@ -96,7 +96,7 @@ services:
         depends_on:
           - keyrock
         environment:
-          - PEP_PROXY_APP_HOST=dss-core
+          - PEP_PROXY_APP_HOST=data-storage
           - PEP_PROXY_APP_PORT=80
           - PEP_PROXY_PORT=4001
           - PEP_PROXY_IDM_HOST=keyrock
@@ -104,9 +104,9 @@ services:
           - PEP_PROXY_AUTH_ENABLED=false
           - PEP_PROXY_IDM_SSL_ENABLED=false
           - PEP_PROXY_IDM_PORT=3005
-          - PEP_PROXY_APP_ID=803f4f84-c658-4c56-88bd-cebedf07eb24
-          - PEP_PROXY_USERNAME=pep_proxy_f49e9df7-e0c4-46a8-bb3b-bb9305fc4e8e
-          - PEP_PASSWORD=pep_proxy_a16411d8-7512-4395-bf49-3e0b373175f6
+          - PEP_PROXY_APP_ID=d6e57ccf-9261-4ec7-a8da-bd9494871e4e
+          - PEP_PROXY_USERNAME=pep_proxy_6b7a2797-000c-4690-b583-4975aa1046d7
+          - PEP_PASSWORD=pep_proxy_5725acce-ba06-4fa3-843c-5a9b6d97cb19
           - PEP_PROXY_PDP=idm
               
     phpmyadmin:

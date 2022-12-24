@@ -242,13 +242,17 @@ function find_user_keyrock($email, $xtoken){
     }
     return array($userid, $username);
 }
-
+############################################################################
+/*                data storage service and proxy                          */
 /* communicate with mongo api */
+
+//products
+
 function sp_print_all_products(){
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-    CURLOPT_URL => 'http://mongo:27017/api/api_products', //the request has to be done in <dss-proxy:4001></dss-proxy:4001>
+    CURLOPT_URL => 'http://data-storage-proxy:4001/api/products', 
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -257,8 +261,62 @@ function sp_print_all_products(){
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_CUSTOMREQUEST => 'GET'
     ));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
     $response = curl_exec($curl);
     curl_close($curl);
     $result = json_decode($response, true);
+    
+    //printing the table products
+    ?>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Date of withdrawl</th>
+            <th>Seller Name</th>
+            <th>Category</th>
+        </tr>
+        <?php
+        foreach ($result as $row){
+            sp_print_product($row);
+        }
+        ?>
+    </table>
+    <?php
+}
+
+function sp_print_product($row){
+    $id=$row['id'];
+    echo "<tr>";
+    echo "<td>".$row['name']."</td>";
+    echo "<td>".$row['price']."</td>";
+    echo "<td>".$row['dateOfWithdrawl']."</td>";
+    echo "<td>".$row['sellerName']."</td>";
+    echo "<td>".$row['category']."</td>";
+    //echo button
+    echo "<form method=\"post\">";
+    echo "<td id=$id>";?><input type="submit" class="button" name="cart_<?php echo $id; ?>" value="Add to cart"><?php echo "</td>";
+    echo "</form>";
+    echo "</tr>";
+    //echo listeners
+
+    if(array_key_exists("cart_".$id, $_POST)) sp_add_to_cart($_SESSION['User_id'], $row);
+}
+
+function sp_add_to_cart($user_id, $row){
+    echo $_SESSION['Access_token'];
+    $arr=array('user_id'=>$user_id, 'product_id'=>$row['id'], 
+                'product_name'=>$row['name'], 'price'=>$row['price']);
+    $data=json_encode($arr);
+    $url="http://data-storage-proxy:4001/api/addCart";
+    
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL,$url);
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    $response=curl_exec($curl);
+    curl_close($curl);
     var_dump($response);
 }

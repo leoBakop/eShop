@@ -55,7 +55,7 @@ if (!loged_in_user()) back_to_index();
 
 
     <?php
-    sp_print_all_products();
+    
     if (array_key_exists('log_out_button', $_POST)) log_out_function();
     ?>
 
