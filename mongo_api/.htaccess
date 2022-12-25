@@ -10,9 +10,3 @@ RewriteEngine On
     RewriteRule ^api/products/(.*)$ ./api/api-get-products.php?id=$1 [QSA,NC,L]
 
 
-#------------------------------cart-----------------------------------------#
-    #add a product into cart, accompanied by data in request 
-    #e.g. /api/cart/new (JSON data included)
-    RewriteCond %{REQUEST_METHOD} POST
-    RewriteRule ^api/addCart$ ./api/api-add-to-cart.php [NC,L]
-

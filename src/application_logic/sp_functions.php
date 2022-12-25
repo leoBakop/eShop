@@ -305,15 +305,15 @@ function sp_print_product($row){
 
 function sp_add_to_cart($user_id, $row){
     echo $_SESSION['Access_token'];
-    $arr=array('user_id'=>$user_id, 'product_id'=>$row['id'], 
-                'product_name'=>$row['name'], 'price'=>$row['price']);
+    $arr=array('user_id'=>$user_id, 'product_id'=>$row['id'], 'product_name'=>$row['name'], 'price'=>$row['price']);
     $data=json_encode($arr);
-    $url="http://data-storage-proxy:4001/api/addCart";
+    $url="http://data-storage-proxy:4001/api/api-add-to-cart.php";
     
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL,$url);
-    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POST, TRUE);
     curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST,'POST');
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     $response=curl_exec($curl);
