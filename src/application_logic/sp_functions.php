@@ -252,7 +252,7 @@ function sp_print_all_products(){
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-    CURLOPT_URL => 'http://data-storage-proxy:4001/api/products', 
+    CURLOPT_URL => 'http://data-storage-proxy:4001/api/api-get-products.php', 
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -285,14 +285,56 @@ function sp_print_all_products(){
     <?php
 }
 
+function sp_print_searched_products($changes, $search){
+    echo ($changes."  ".$search."<br>");
+    echo $_SESSION['Access_token']."<br>";
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => 'http://data-storage-proxy:4001/api/api-get-products.php?column='.$changes.'&value='.$search, 
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET'
+    ));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    $response = curl_exec($curl);
+    curl_close($curl);
+    var_dump($response);
+    $result = json_decode($response, true);
+    if($result==null){
+        echo "No product with that values";
+        return;
+    }
+    
+    //printing the table products
+    ?>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Date of withdrawl</th>
+            <th>Seller Name</th>
+            <th>Category</th>
+        </tr>
+        <?php
+        foreach ($result as $row){
+            sp_print_product($row);
+        }
+        ?>
+    </table>
+    <?php
+}
+
 function sp_print_product($row){
-    $id=$row['id'];
+    $id=$row['id_c'];
     echo "<tr>";
-    echo "<td>".$row['name']."</td>";
-    echo "<td>".$row['price']."</td>";
-    echo "<td>".$row['dateOfWithdrawl']."</td>";
-    echo "<td>".$row['sellerName']."</td>";
-    echo "<td>".$row['category']."</td>";
+    echo "<td>".$row['Name']."</td>";
+    echo "<td>".$row['Price']."</td>";
+    echo "<td>".$row['DateOfWithdrawl']."</td>";
+    echo "<td>".$row['SellerName']."</td>";
+    echo "<td>".$row['Category']."</td>";
     //echo button
     echo "<form method=\"post\">";
     echo "<td id=$id>";?><input type="submit" class="button" name="cart_<?php echo $id; ?>" value="Add to cart"><?php echo "</td>";
@@ -304,8 +346,7 @@ function sp_print_product($row){
 }
 
 function sp_add_to_cart($user_id, $row){
-    echo $_SESSION['Access_token'];
-    $arr=array('user_id'=>$user_id, 'product_id'=>$row['id'], 'product_name'=>$row['name'], 'price'=>$row['price']);
+    $arr=array('user_id'=>$user_id, 'product_id'=>$row['id_c'], 'product_name'=>$row['Name'], 'Price'=>$row['Price']);
     $data=json_encode($arr);
     $url="http://data-storage-proxy:4001/api/api-add-to-cart.php";
     
@@ -318,5 +359,4 @@ function sp_add_to_cart($user_id, $row){
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     $response=curl_exec($curl);
     curl_close($curl);
-    var_dump($response);
 }

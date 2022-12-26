@@ -6,7 +6,7 @@
         $user_id=$data['user_id'];
         $product_id=$data['product_id'];
         $product_name=$data['product_name'];
-        $price=$data['price'];
+        $price=$data['Price'];
         //Select ID from Cart order by asc // in order to take the last id 
         //id_c stands for id_custom
         $filter = [];

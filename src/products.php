@@ -54,12 +54,11 @@ if (!loged_in_user()) back_to_index();
 
     <?php
     if(array_key_exists('search_btn', $_POST)){
-        search_product_by_specific_attribute_sql($_POST['changes'], $_POST['search'], 
-                                                    $con,$_SESSION['User_id'] );
+        sp_print_searched_products($_POST['changes'], $_POST['search']);
     }elseif(array_key_exists('print_all', $_POST)){
-        print_all_products_sql($con, $_SESSION['User_id']);
+        sp_print_all_products();
     }else{
-        sp_print_all_products($con, $_SESSION['User_id']);
+        sp_print_all_products();
     }
 
     
