@@ -1,5 +1,6 @@
 <?php
 include "./application_logic/functions.php";
+include "./application_logic/sp_functions.php";
 include "./sql_connection/sql_connection.php";
 
 if (session_status() === PHP_SESSION_NONE) session_start();
@@ -34,7 +35,8 @@ if (!loged_in_user()) back_to_index();
     </div>
     <button class="button" onclick="go_to_welcome()">Back </button>
     <?php
-    print_cart_ajax($_SESSION["User_id"], $con);
+    //print_cart_ajax($_SESSION["User_id"], $con);
+    sp_print_cart();
     ?>
     <br><br><br>
     

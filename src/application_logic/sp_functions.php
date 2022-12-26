@@ -278,7 +278,7 @@ function sp_print_all_products(){
         </tr>
         <?php
         foreach ($result as $row){
-            sp_print_product($row);
+            sp_print_product_line($row);
         }
         ?>
     </table>
@@ -286,8 +286,7 @@ function sp_print_all_products(){
 }
 
 function sp_print_searched_products($changes, $search){
-    echo ($changes."  ".$search."<br>");
-    echo $_SESSION['Access_token']."<br>";
+
     $arr=array('column'=>$changes, 'value'=>$search);
     $data=json_encode($arr);
     $url="http://data-storage-proxy:4001/api/api-get-products.php?search=1";
@@ -301,7 +300,6 @@ function sp_print_searched_products($changes, $search){
     $response=curl_exec($curl);
     curl_close($curl);
 
-    var_dump($response);
     $result = json_decode($response, true);
     if($result==null){
         echo "No product with that values";
@@ -320,14 +318,14 @@ function sp_print_searched_products($changes, $search){
         </tr>
         <?php
         foreach ($result as $row){
-            sp_print_product($row);
+            sp_print_product_line($row);
         }
         ?>
     </table>
     <?php
 }
 
-function sp_print_product($row){
+function sp_print_product_line($row){
     $id=$row['id_c'];
     echo "<tr>";
     echo "<td>".$row['Name']."</td>";
@@ -358,5 +356,101 @@ function sp_add_to_cart($user_id, $row){
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     $response=curl_exec($curl);
+    curl_close($curl);
+}
+
+//cart
+
+function sp_print_cart(){
+    $user_id=$_SESSION['User_id'];
+    echo $user_id ."<br>";
+    echo $_SESSION['Access_token'];
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => 'http://data-storage-proxy:4001/api/api-get-cart.php?user_id='.$user_id, 
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET'
+    ));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    $response = curl_exec($curl);
+    curl_close($curl);
+    $result = json_decode($response, true);
+    ?> 
+    <table>
+        <tr>
+            <th>Product name</th>
+            <th>Date of Insertion</th>
+            <th>Price</th>
+        </tr> 
+    <?php
+
+    foreach($result as $row){
+        sp_print_cart_line($row);
+    }
+    ?>
+    </table>
+
+    <script src="./application_logic/jquery-3.6.1.js"></script>
+    <script type="text/javascript">
+    
+    function sp_remove_from_cart(id){
+        $.ajax({
+            type:'post',
+            url:'./application_logic/ajax_functions_sp.php',
+            data:{function: 'sp_remove_from_cart', id:id},
+            success:function(data){
+                //$('#'+id).detach();
+                alert(id);
+            }
+        });
+    
+    };
+    </script>
+
+    <?php
+}
+
+
+function sp_print_cart_line($row){
+    $cart_id=$row['id_c'];
+    echo "<tr id=$cart_id>";
+        echo "<td>".$row['product_name']."</td>";
+        echo "<td>".$row['date']."</td>";
+        echo "<td>".$row['price']."</td>";
+
+        //creation off ajax function in order to 
+        //remove sth from cart
+        ?> 
+        <th class="normal_th">
+            <form  method="post">
+                <input type="submit" value="delete this" onclick="sp_remove_from_cart(<?php echo $cart_id ?>)"
+                    class="button"/> 
+            </form>
+        </th>
+        <?php
+    echo "</tr>";
+}
+
+
+function sp_remove_from_cart($id_c){
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => 'http://data-storage-proxy:4001/api/api-delete-from-cart.php?id_c='.$id_c, 
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    ));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    curl_exec($curl);
     curl_close($curl);
 }
