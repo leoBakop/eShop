@@ -252,7 +252,7 @@ function sp_print_all_products(){
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-    CURLOPT_URL => 'http://data-storage-proxy:4001/api/api-get-products.php', 
+    CURLOPT_URL => 'http://data-storage-proxy:4001/api/api-get-products.php?search=0', 
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -288,19 +288,19 @@ function sp_print_all_products(){
 function sp_print_searched_products($changes, $search){
     echo ($changes."  ".$search."<br>");
     echo $_SESSION['Access_token']."<br>";
+    $arr=array('column'=>$changes, 'value'=>$search);
+    $data=json_encode($arr);
+    $url="http://data-storage-proxy:4001/api/api-get-products.php?search=1";
+    
     $curl = curl_init();
-    curl_setopt_array($curl, array(
-    CURLOPT_URL => 'http://data-storage-proxy:4001/api/api-get-products.php?column='.$changes.'&value='.$search, 
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'GET'
-    ));
+    curl_setopt($curl, CURLOPT_URL,$url);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST,'GET');
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
-    $response = curl_exec($curl);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    $response=curl_exec($curl);
     curl_close($curl);
+
     var_dump($response);
     $result = json_decode($response, true);
     if($result==null){
