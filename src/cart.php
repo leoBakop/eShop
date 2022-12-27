@@ -3,7 +3,7 @@ include "./application_logic/functions.php";
 include "./application_logic/sp_functions.php";
 include "./sql_connection/sql_connection.php";
 
-if (session_status() === PHP_SESSION_NONE) session_start();
+session_start();
 if (!loged_in_user()) back_to_index();
 ?>
 <!DOCTYPE html>
@@ -37,13 +37,18 @@ if (!loged_in_user()) back_to_index();
     <?php
     //print_cart_ajax($_SESSION["User_id"], $con);
     sp_print_cart();
+    //sp_remove_from_cart(10);
     ?>
     <br><br><br>
     
 
     <?php
     if (array_key_exists('log_out_button', $_POST)) log_out_function();
+
+    
     ?>
+
+
 
 
 </body>

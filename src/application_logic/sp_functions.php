@@ -363,8 +363,7 @@ function sp_add_to_cart($user_id, $row){
 
 function sp_print_cart(){
     $user_id=$_SESSION['User_id'];
-    echo $user_id ."<br>";
-    echo $_SESSION['Access_token'];
+
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
@@ -400,13 +399,14 @@ function sp_print_cart(){
     <script type="text/javascript">
     
     function sp_remove_from_cart(id){
+
         $.ajax({
             type:'post',
             url:'./application_logic/ajax_functions_sp.php',
             data:{function: 'sp_remove_from_cart', id:id},
             success:function(data){
-                //$('#'+id).detach();
-                alert(id);
+                $('#'+id).detach();
+
             }
         });
     
@@ -437,20 +437,19 @@ function sp_print_cart_line($row){
     echo "</tr>";
 }
 
-
-function sp_remove_from_cart($id_c){
+function sp_remove_from_cart($id_c, $x_auth_token){
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
     CURLOPT_URL => 'http://data-storage-proxy:4001/api/api-delete-from-cart.php?id_c='.$id_c, 
-    CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
     CURLOPT_TIMEOUT => 0,
     CURLOPT_FOLLOWLOCATION => true,
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     ));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$x_auth_token));
     curl_exec($curl);
     curl_close($curl);
 }
