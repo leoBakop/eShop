@@ -1,6 +1,7 @@
 <?php
 //if (session_status()=== PHP_SESSION_NONE) session_start();
 include "./application_logic/functions.php";
+include "./application_logic/sp_functions.php";
 include "sql_connection/sql_connection.php";
 if (!loged_in_user()) back_to_index();
 
@@ -33,14 +34,12 @@ if (!loged_in_user()) back_to_index();
         <input class="button" type="submit" name="add_product" value="Add product">
     </form>
     <?php
-    if (array_key_exists('add_product', $_GET)) add_product_sql(
-        $_SESSION['Username'],
+    if (array_key_exists('add_product', $_GET)) sp_add_product(
         $_GET["name"],
         $_GET["productCode"],
-        $_GET["date"],
         $_GET["price"],
+        $_GET["date"],
         $_GET["category"],
-        $con
     );
     ?>
 <button class="button" onclick="go_to_welcome()">Back </button>

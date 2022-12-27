@@ -453,3 +453,26 @@ function sp_remove_from_cart($id_c, $x_auth_token){
     curl_exec($curl);
     curl_close($curl);
 }
+
+
+//products 
+//add product
+
+function sp_add_product($name, $product_code, $price, $date, $category){
+    
+    $arr=array('name'=>$name, 'product_code'=>$product_code, 
+                'price'=>$price,'date'=>$date, 'sellerName'=>$_SESSION['Username'], 
+                'category'=>$category );
+
+    $data=json_encode($arr);
+    $url="http://data-storage-proxy:4001/api/api-add-product.php";
+    
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL,$url);
+    curl_setopt($curl, CURLOPT_POST, TRUE);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST,'POST');
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    curl_exec($curl);
+    curl_close($curl);
+}
