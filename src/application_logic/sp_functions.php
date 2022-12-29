@@ -14,10 +14,10 @@ function sp_signup($name, $surname,
                 $username, $password, $email, $role, $token);
     
     //find the id of the user added
-    $user_id=find_user_keyrock($email, $token);
+    $user_id=find_user_keyrock($email, $token)[0];
     $tmp=ask_app_id("e_shop", $token);
     if ($tmp==-1){
-        ?><script>alert("a problem was occured");
+        ?><script>alert("a problem has occured");
         window.location.replace("index.php");</script><?php
         die;
     }
@@ -362,6 +362,7 @@ function sp_add_to_cart($user_id, $row){
 //cart
 
 function sp_print_cart(){
+    $totCost=0;
     $user_id=$_SESSION['User_id'];
 
     $curl = curl_init();
@@ -390,7 +391,7 @@ function sp_print_cart(){
     <?php
 
     foreach($result as $row){
-        sp_print_cart_line($row);
+        $totCost+=sp_print_cart_line($row);
     }
     ?>
     </table>
@@ -412,7 +413,12 @@ function sp_print_cart(){
     
     };
     </script>
-
+    <div class="total_cost">
+    <?php
+    $_SESSION['totCost']=$totCost;
+    echo "total cost is ".   $_SESSION['totCost']."$ <br>" ;
+    ?>
+    </div>
     <?php
 }
 
@@ -435,8 +441,10 @@ function sp_print_cart_line($row){
         </th>
         <?php
     echo "</tr>";
+    return $row["price"];
 }
 
+//method that is called from ajax_functions.php
 function sp_remove_from_cart($id_c, $x_auth_token){
     $curl = curl_init();
 
@@ -455,7 +463,7 @@ function sp_remove_from_cart($id_c, $x_auth_token){
 }
 
 
-//products 
+//seller 
 //add product
 
 function sp_add_product($name, $product_code, $price, $date, $category){
@@ -472,6 +480,127 @@ function sp_add_product($name, $product_code, $price, $date, $category){
     curl_setopt($curl, CURLOPT_POST, TRUE);
     curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST,'POST');
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    curl_exec($curl);
+    curl_close($curl);
+}
+
+//print all products for a specific seller
+function sp_print_seller_products(){
+    $user_name=$_SESSION['Username'];
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => 'http://data-storage-proxy:4001/api/api-get-seller-products.php?seller_name='.$user_name, 
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET'
+    ));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    $response = curl_exec($curl);
+    curl_close($curl);
+    $result = json_decode($response, true);
+    ?>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Product Code</th>
+            <th>Date of withdrawl</th>
+            <th>Category</th>
+        </tr>
+        <?php
+        foreach($result as $row){
+            sp_print_seller_product_line($row);
+        }
+        ?>
+    </table>
+    <script src="./application_logic/jquery-3.6.1.js"></script>
+    <script type="text/javascript">
+    
+    function sp_delete_seller_product(id){
+        alert(id);
+         $.ajax({
+            type:'post',
+            url:'./application_logic/ajax_functions_sp.php',
+            data:{function: 'sp_delete_seller_product', id:id},
+            success:function(data){
+                $('#'+id).detach();
+
+            }
+        }); 
+    
+    };
+    </script>
+
+
+    <?php
+}
+
+function sp_print_seller_product_line($row){
+    $id_c=$row['id_c'];
+    echo "<tr id=$id_c>";
+        echo "<td>".$row['Name']."</td>";
+        echo "<td>".$row['Price']."</td>";
+        echo "<td>".$row['Product_code']."</td>";
+        echo "<td>".$row['DateOfWithdrawl']."</td>";
+        echo "<td>".$row['Category']."</td>";
+        ?> 
+        <th class="normal_th">
+            <form  method="post">
+                <input type="submit" value="delete this" onclick="sp_delete_seller_product(<?php echo $id_c ?>)"
+                    class="button"/> 
+                <input type="submit" value="Update product" 
+                    name="update_product_button<?php echo "_$id_c"; ?>"  class="button"/> 
+            </form>
+        </th>
+        <?php
+    echo "</tr>";
+
+    if(array_key_exists('update_product_button_'.$id_c, $_POST)){ 
+        //just a method in order to navigate to the update product page
+        //stores the product id in order to use ot in update_product_sql.php (name for the first phase)
+        go_to_update_product_sql($id_c);
+        die;
+    }
+}
+
+
+//method that is called from ajax_functions.php
+function sp_delete_seller_product($id_c, $x_auth_token){
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => 'http://data-storage-proxy:4001/api/api-delete-from-seller-products.php?id_c='.$id_c, 
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    ));
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$x_auth_token));
+    curl_exec($curl);
+    curl_close($curl);
+}
+
+
+function sp_update_product($product_id, $changes, $value){
+    $arr=array('id_c'=>$product_id, 'column'=>$changes, 'value'=>$value);
+
+    $data=json_encode($arr);
+    $url="http://data-storage-proxy:4001/api/api-update-seller-product.php";
+
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL,$url);
+    curl_setopt($curl, CURLOPT_POST, TRUE);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST,'PUT');
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
     curl_exec($curl);
     curl_close($curl);

@@ -1,6 +1,7 @@
 <?php
 include "./application_logic/functions.php";
 include "./sql_connection/sql_connection.php";
+include "./application_logic/sp_functions.php";
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!loged_in_user()) back_to_index();
 
@@ -44,11 +45,10 @@ if (!loged_in_user()) back_to_index();
                 </form>
 
             <?php
-                if (array_key_exists('change_name', $_POST)) update_product(
+                if (array_key_exists('change_name', $_POST)) sp_update_product(
                     $_SESSION['product_id'],
                     "Name",
-                    $_POST['Name'],
-                    $con
+                    $_POST['Name']
                 );
             }elseif($_GET['changes'] == "Price") {
             ?>
@@ -58,11 +58,10 @@ if (!loged_in_user()) back_to_index();
                     <input type="submit" name="change_price" value="Change Price">
                 </form>
             <?php
-                if (array_key_exists('change_price', $_POST)) update_product(
+                if (array_key_exists('change_price', $_POST)) sp_update_product(
                     $_SESSION['product_id'],
                     "Price",
-                    $_POST['Price'],
-                    $con
+                    $_POST['Price']
                 );
             }elseif($_GET['changes']=="ProductCode"){
             ?>
@@ -73,11 +72,10 @@ if (!loged_in_user()) back_to_index();
                 </form>
 
             <?php
-                if (array_key_exists('change_ProductCode', $_POST)) update_product(
+                if (array_key_exists('change_ProductCode', $_POST)) sp_update_product(
                     $_SESSION['product_id'],
-                    "ProductCode",
-                    $_POST['ProductCode'],
-                    $con
+                    "Product_code",
+                    $_POST['ProductCode']
                 );
             }elseif($_GET['changes']=="DateOfWithdrawal"){
                 ?>
@@ -88,11 +86,10 @@ if (!loged_in_user()) back_to_index();
                     </form>
     
                 <?php
-                    if (array_key_exists('change_DateOfWithdrawal', $_POST)) update_product(
+                    if (array_key_exists('change_DateOfWithdrawal', $_POST)) sp_update_product(
                         $_SESSION['product_id'],
-                        "DateOfWithdrawal",
-                        $_POST['DateOfWithdrawal'],
-                        $con
+                        "DateOfWithdrawl",
+                        $_POST['DateOfWithdrawal']
                     );
                 }elseif($_GET['changes']=="Category"){
                     ?>
@@ -103,11 +100,10 @@ if (!loged_in_user()) back_to_index();
                         </form>
         
                     <?php
-                        if (array_key_exists('change_Category', $_POST)) update_product(
+                        if (array_key_exists('change_Category', $_POST)) sp_update_product(
                             $_SESSION['product_id'],
                             "Category",
-                            $_POST['Category'],
-                            $con
+                            $_POST['Category']
                         );
                     }
         }
