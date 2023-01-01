@@ -9,6 +9,7 @@
         $price=$data['price'];
         $seller_name=$data['sellerName'];
         $category=$data['category'];
+        $availability=$data['availability'];
         //Select ID from Cart order by asc // in order to take the last id 
         //id_c stands for id_custom
         $filter = [];
@@ -24,6 +25,7 @@
             'Price'=>$price,
             'DateOfWithdrawl'=>$date,
             'SellerName'=>$seller_name,
+            'Availability'=>$availability,
             'Category'=>$category
         );
         $products->insertOne($fields);

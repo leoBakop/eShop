@@ -336,14 +336,19 @@ function sp_print_product_line($row){
     //echo button
     echo "<form method=\"post\">";
     echo "<td id=$id>";?><input type="submit" class="button" name="cart_<?php echo $id; ?>" value="Add to cart"><?php echo "</td>";
+    if($_SESSION['Role']=="User"){
+        echo "<td>";?><input type="submit" class="button" name="orion_<?php echo $id; ?>" value="Subscribe"><?php echo "</td>";
+    }
     echo "</form>";
     echo "</tr>";
     //echo listeners
 
     if(array_key_exists("cart_".$id, $_POST)) sp_add_to_cart($_SESSION['User_id'], $row);
+    if(array_key_exists("orion_".$id, $_POST)) subscribe($_SESSION['Username'], $row);
 }
 
 function sp_add_to_cart($user_id, $row){
+
     $arr=array('user_id'=>$user_id, 'product_id'=>$row['id_c'], 'product_name'=>$row['Name'], 'Price'=>$row['Price']);
     $data=json_encode($arr);
     $url="http://data-storage-proxy:4001/api/api-add-to-cart.php";
@@ -358,6 +363,109 @@ function sp_add_to_cart($user_id, $row){
     $response=curl_exec($curl);
     curl_close($curl);
 }
+
+//orion functions 
+//concept
+/* 
+A entity is going to be added in orion for every subscribe
+ex. let a product with Name Product_1 and two users User_1 and User_2
+if User_1 subscribe to product_1 then an entity is going to be created with Type User_1_Product_1
+if user_2 also subscribe to product_1 then another entity will be created with Type User_2_Product_1
+
+Warning: Both entities are going to be entities of the same ID (ex. ID Product_1).
+
+In case of update on Product_1 , all the subscribers of Product_1 will be informed  
+*/
+
+function createEntityOrion($xtoken, $id, $type){
+    
+  
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'http://orion-proxy:4002/v2/entities', // use orion-proxy (PEP Proxy for Orion CB) IP address and port instead of Orion CB's 
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>'{
+          "id": "'.$id.'",
+          "type": "'.$type.'",
+          "availability": {
+              "value": "1",
+              "type": "Integer"
+          }
+        }',
+        CURLOPT_HTTPHEADER => array(
+          'Content-Type: application/json',
+          'X-Auth-Token: '.$xtoken.'',
+          'Accept: application/json'
+        ),
+      ));
+      
+      curl_exec($curl);
+      curl_close($curl);
+        
+}
+
+function subscribe($user_name, $row){
+    $xtoken=$_SESSION['Access_token'];
+    //id must have no space, so I replace every whitespace with undrscore
+    $id=str_replace(" ", "_", $row['Name']);
+    $type=$user_name."_".$id;
+    createEntityOrion($xtoken, $id, $type);
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'http://orion-proxy:4002/v2/subscriptions', // use orion-proxy (PEP Proxy for Orion CB) IP address and port instead of Orion CB's 
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>'{
+            "description": "Dummy description",
+            "subject": {
+                "entities": [
+                    {
+                        "id": "'.$id.'",
+                        "type": "'.$type.'"
+                    }
+                ],
+                "condition": {
+                    "attrs": [
+                        "availability"
+                    ]
+                }
+            },
+            "notification": {
+                "http": {
+                  "url": "http://app-apache:80/welcome.php"
+                },
+                "attrs": [
+                  "availability"
+                ]
+              },
+              "expires": "2040-01-01T14:00:00.00Z"
+            }',
+        CURLOPT_HTTPHEADER => array(
+          'Content-Type: application/json',
+          'X-Auth-Token: '.$xtoken.'',
+          'Accept: application/json'
+        ),
+      ));
+      
+      curl_exec($curl);
+      curl_close($curl);
+
+}
+
 
 //cart
 
@@ -470,8 +578,12 @@ function sp_add_product($name, $product_code, $price, $date, $category){
     
     $arr=array('name'=>$name, 'product_code'=>$product_code, 
                 'price'=>$price,'date'=>$date, 'sellerName'=>$_SESSION['Username'], 
-                'category'=>$category );
-
+                'category'=>$category, "availability"=>1 );
+    /* 
+        availability is used in the orion part
+        when availability is changed(updated by product seller)
+        the subscribers will be notified 
+    */
     $data=json_encode($arr);
     $url="http://data-storage-proxy:4001/api/api-add-product.php";
     
@@ -513,6 +625,7 @@ function sp_print_seller_products(){
             <th>Product Code</th>
             <th>Date of withdrawl</th>
             <th>Category</th>
+            <th>Availability</th>
         </tr>
         <?php
         foreach($result as $row){
@@ -544,12 +657,15 @@ function sp_print_seller_products(){
 
 function sp_print_seller_product_line($row){
     $id_c=$row['id_c'];
+    $avail="No";
+    if ($row['Availability']==1) $avail="Yes";
     echo "<tr id=$id_c>";
         echo "<td>".$row['Name']."</td>";
         echo "<td>".$row['Price']."</td>";
         echo "<td>".$row['Product_code']."</td>";
         echo "<td>".$row['DateOfWithdrawl']."</td>";
         echo "<td>".$row['Category']."</td>";
+        echo "<td>".$avail."</td>";
         ?> 
         <th class="normal_th">
             <form  method="post">

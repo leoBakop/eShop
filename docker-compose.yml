@@ -54,6 +54,7 @@ services:
         networks:
            intranet1:
               ipv4_address: 10.1.2.6
+
     data-storage:
         container_name: data-storage
         hostname: data-storage
@@ -66,22 +67,7 @@ services:
               ipv4_address: 10.1.2.3
         expose:
           - 80
-    mongo:
-        image: mongo:latest
-        container_name: mongodb
-        restart: always
-        volumes:
-           - ./mongodb_data:/data/db
-        environment:
-           MONGO_INITDB_ROOT_USERNAME: admin
-           MONGO_INITDB_ROOT_PASSWORD: admin
-        ports: 
-           - 27018:27017
-        expose:
-           - 27017
-        networks:
-            intranet1:
-               ipv4_address: 10.1.2.7
+    
     data-storage-proxy:
         image: fiware/pep-proxy
         container_name: data-storage-proxy
@@ -108,6 +94,80 @@ services:
           - PEP_PROXY_USERNAME=pep_proxy_6b7a2797-000c-4690-b583-4975aa1046d7
           - PEP_PASSWORD=pep_proxy_5725acce-ba06-4fa3-843c-5a9b6d97cb19
           - PEP_PROXY_PDP=idm
+
+
+    mongo:
+        image: mongo:latest
+        container_name: mongodb
+        restart: always
+        volumes:
+           - ./mongodb_data:/data/db
+        environment:
+           MONGO_INITDB_ROOT_USERNAME: admin
+           MONGO_INITDB_ROOT_PASSWORD: admin
+        ports: 
+           - "27018:27017"
+
+        networks:
+            intranet1:
+               ipv4_address: 10.1.2.7
+    orion-proxy:
+        image: fiware/pep-proxy
+        container_name: orion-proxy
+        hostname: orion-proxy
+        networks:
+           intranet1:
+              ipv4_address: 10.1.2.11
+        ports:
+          - 4002:4002
+        expose:
+          - 4002
+        depends_on:
+          - keyrock
+        environment:
+          - PEP_PROXY_APP_HOST=orion
+          - PEP_PROXY_APP_PORT=1026
+          - PEP_PROXY_PORT=4002
+          - PEP_PROXY_IDM_HOST=keyrock
+          - PEP_PROXY_HTTPS_ENABLED=false
+          - PEP_PROXY_AUTH_ENABLED=false
+          - PEP_PROXY_IDM_SSL_ENABLED=false
+          - PEP_PROXY_IDM_PORT=3005
+          - PEP_PROXY_APP_ID=d6e57ccf-9261-4ec7-a8da-bd9494871e4e
+          - PEP_PROXY_USERNAME=pep_proxy_6b7a2797-000c-4690-b583-4975aa1046d7
+          - PEP_PASSWORD=pep_proxy_5725acce-ba06-4fa3-843c-5a9b6d97cb19
+          - PEP_PROXY_PDP=idm
+
+    orion-mongo:
+        image: mongo:latest
+        container_name: mongodb-orion
+        restart: always
+        volumes:
+           - ./mongodb_orion_data/database:/data/db
+        environment:
+           MONGO_INITDB_ROOT_USERNAME: admin
+           MONGO_INITDB_ROOT_PASSWORD: admin
+        ports:
+           - 27017:27017
+        expose:
+           - 27017
+        networks:
+           intranet1:
+               ipv4_address: 10.1.2.8
+
+
+    orion:
+        image: fiware/orion
+        hostname: orion
+        container_name: orion
+        links:
+           - orion-mongo
+        command: -dbhost orion-mongo -dbuser admin -dbpwd admin
+        networks:
+           intranet1:
+              ipv4_address: 10.1.2.10
+        expose:
+           - 1026
               
     phpmyadmin:
         container_name: sql-admin

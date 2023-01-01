@@ -29,7 +29,7 @@ if (!loged_in_user()) back_to_index();
                 <option value="ProductCode">Product Code</option>
                 <option value="DateOfWithdrawal">DateOfWithdrawal</option>
                 <option value="Category">Category</option>
-
+                <option value="Availability">Availability</option>
             </select>
         <input type="submit" name="update" value="update product">
     </form>
@@ -105,7 +105,25 @@ if (!loged_in_user()) back_to_index();
                             "Category",
                             $_POST['Category']
                         );
-                    }
+                }elseif($_GET['changes']=="Availability"){
+                    ?>
+                        <form method="post">
+                            <input type="submit" style="background-color:DodgerBlue;" name="change_avail_1" value="It is available">
+                            <input type="submit" style="background-color:Tomato;" name="change_avail_0" value="It isn't available">
+                        </form>
+        
+                    <?php
+                        if (array_key_exists('change_avail_1', $_POST)) sp_update_product(
+                            $_SESSION['product_id'],
+                            "Availability",
+                            1
+                        );
+                        else sp_update_product(
+                            $_SESSION['product_id'],
+                            "Availability",
+                            0
+                        );
+                }
         }
         ?>
     </div>
