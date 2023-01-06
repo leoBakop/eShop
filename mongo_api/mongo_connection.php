@@ -5,4 +5,5 @@
 
     $products = $db->products;
     $cart = $db->cart;
+    $sub= $db->subscribtions;
 ?>

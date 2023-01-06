@@ -26,7 +26,10 @@ if (!loged_in_user()) back_to_index();
             <select name="changes">
                 <option value="Name">Name</option>
                 <option value="Price">Price</option>
-                <option value="ProductCode">Product Code</option>
+               <!-- <option value="ProductCode">Product Code</option> is forbidenn
+                    cause if the product code will change, the orion i will have problem
+                    in the orion entity (id of the entity is the product code)
+            -->
                 <option value="DateOfWithdrawal">DateOfWithdrawal</option>
                 <option value="Category">Category</option>
                 <option value="Availability">Availability</option>
@@ -108,21 +111,15 @@ if (!loged_in_user()) back_to_index();
                 }elseif($_GET['changes']=="Availability"){
                     ?>
                         <form method="post">
-                            <input type="submit" style="background-color:DodgerBlue;" name="change_avail_1" value="It is available">
-                            <input type="submit" style="background-color:Tomato;" name="change_avail_0" value="It isn't available">
+                            <input type="submit" style="background-color:DodgerBlue;" name="change_avail" value="Change Availability">
                         </form>
         
                     <?php
-                        if (array_key_exists('change_avail_1', $_POST)) sp_update_product(
-                            $_SESSION['product_id'],
-                            "Availability",
-                            1
-                        );
-                        else sp_update_product(
-                            $_SESSION['product_id'],
-                            "Availability",
-                            0
-                        );
+                        if (array_key_exists('change_avail', $_POST)) {
+                            sp_update_product_availability($_SESSION['product_code']);
+                            sp_update_availability_subscriptions($_SESSION['product_code']);
+                        }
+                        
                 }
         }
         ?>

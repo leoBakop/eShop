@@ -97,18 +97,21 @@ services:
 
 
     mongo:
-        image: mongo:latest
-        container_name: mongodb
-        restart: always
-        volumes:
+         image: mongo:latest
+         container_name: mongodb
+         restart: always
+         volumes:
            - ./mongodb_data:/data/db
-        environment:
+         environment:
            MONGO_INITDB_ROOT_USERNAME: admin
            MONGO_INITDB_ROOT_PASSWORD: admin
-        ports: 
+         ports: 
            - "27018:27017"
+         expose: 
+            - 27018
+         
 
-        networks:
+         networks:
             intranet1:
                ipv4_address: 10.1.2.7
     orion-proxy:

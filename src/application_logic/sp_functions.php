@@ -341,8 +341,8 @@ function sp_print_product_line($row){
     }
     echo "</form>";
     echo "</tr>";
-    //echo listeners
 
+    //echo listeners
     if(array_key_exists("cart_".$id, $_POST)) sp_add_to_cart($_SESSION['User_id'], $row);
     if(array_key_exists("orion_".$id, $_POST)) subscribe($_SESSION['Username'], $row);
 }
@@ -364,107 +364,6 @@ function sp_add_to_cart($user_id, $row){
     curl_close($curl);
 }
 
-//orion functions 
-//concept
-/* 
-A entity is going to be added in orion for every subscribe
-ex. let a product with Name Product_1 and two users User_1 and User_2
-if User_1 subscribe to product_1 then an entity is going to be created with Type User_1_Product_1
-if user_2 also subscribe to product_1 then another entity will be created with Type User_2_Product_1
-
-Warning: Both entities are going to be entities of the same ID (ex. ID Product_1).
-
-In case of update on Product_1 , all the subscribers of Product_1 will be informed  
-*/
-
-function createEntityOrion($xtoken, $id, $type){
-    
-  
-    $curl = curl_init();
-
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => 'http://orion-proxy:4002/v2/entities', // use orion-proxy (PEP Proxy for Orion CB) IP address and port instead of Orion CB's 
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS =>'{
-          "id": "'.$id.'",
-          "type": "'.$type.'",
-          "availability": {
-              "value": "1",
-              "type": "Integer"
-          }
-        }',
-        CURLOPT_HTTPHEADER => array(
-          'Content-Type: application/json',
-          'X-Auth-Token: '.$xtoken.'',
-          'Accept: application/json'
-        ),
-      ));
-      
-      curl_exec($curl);
-      curl_close($curl);
-        
-}
-
-function subscribe($user_name, $row){
-    $xtoken=$_SESSION['Access_token'];
-    //id must have no space, so I replace every whitespace with undrscore
-    $id=str_replace(" ", "_", $row['Name']);
-    $type=$user_name."_".$id;
-    createEntityOrion($xtoken, $id, $type);
-
-    $curl = curl_init();
-
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => 'http://orion-proxy:4002/v2/subscriptions', // use orion-proxy (PEP Proxy for Orion CB) IP address and port instead of Orion CB's 
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS =>'{
-            "description": "Dummy description",
-            "subject": {
-                "entities": [
-                    {
-                        "id": "'.$id.'",
-                        "type": "'.$type.'"
-                    }
-                ],
-                "condition": {
-                    "attrs": [
-                        "availability"
-                    ]
-                }
-            },
-            "notification": {
-                "http": {
-                  "url": "http://app-apache:80/welcome.php"
-                },
-                "attrs": [
-                  "availability"
-                ]
-              },
-              "expires": "2040-01-01T14:00:00.00Z"
-            }',
-        CURLOPT_HTTPHEADER => array(
-          'Content-Type: application/json',
-          'X-Auth-Token: '.$xtoken.'',
-          'Accept: application/json'
-        ),
-      ));
-      
-      curl_exec($curl);
-      curl_close($curl);
-
-}
 
 
 //cart
@@ -595,6 +494,10 @@ function sp_add_product($name, $product_code, $price, $date, $category){
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
     curl_exec($curl);
     curl_close($curl);
+
+    //add this product as entity into orion
+    $id=str_replace(" ", "_", $product_code);
+    createEntityOrion($_SESSION['Access_token'], $id);
 }
 
 //print all products for a specific seller
@@ -681,7 +584,7 @@ function sp_print_seller_product_line($row){
     if(array_key_exists('update_product_button_'.$id_c, $_POST)){ 
         //just a method in order to navigate to the update product page
         //stores the product id in order to use ot in update_product_sql.php (name for the first phase)
-        go_to_update_product_sql($id_c);
+        go_to_update_product_sql($id_c, $row['Product_code']);
         die;
     }
 }
@@ -721,3 +624,159 @@ function sp_update_product($product_id, $changes, $value){
     curl_exec($curl);
     curl_close($curl);
 }
+
+//that method update availability in product table
+function sp_update_product_availability($product_code){
+    $id=str_replace(" ", "_", $product_code);
+    echo $_SESSION['Access_token']."<br>";
+    $url="http://data-storage-proxy:4001/api/api-update-seller-product.php?Subscribe_product=".$id;
+    echo $url;
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL,$url);
+    curl_setopt_array($curl, array(
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST'
+      ));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    $response=curl_exec($curl);
+    curl_close($curl);
+    $result = json_decode($response, true);
+    var_dump($result);
+}
+
+//method that updates the availability in subscrptions table in mongodb (NOT orion)
+function sp_update_availability_subscriptions($product_code){
+    $product_code= str_replace(" ", "_", $product_code);
+    // i have to change the url
+    $url="http://data-storage-proxy:4001/api/api-put-sub.php?Subscribe_product=".$product_code;
+
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL,$url);
+    curl_setopt($curl, CURLOPT_POST, TRUE);
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST,'PUT');
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    curl_exec($curl);
+    curl_close($curl);
+}
+//orion functions 
+//concept
+/* 
+1. First of all an entity of every product is created in the orion
+1.1 id of the entity is the product_code
+1.2 Type is "Products"
+2.Every time a user hit the subscription button, 
+a subscription is created for this user and this product (in orion) 
+3. when a product is updatedn a put request will be sent in subscription table 
+( directly in data storage mongo) in api/api-put-sub?Product_code=entity_id (see 1.1)
+4. In welcome pafe, a get method will be implemented in get-subscribers?user_id in dss-mongodb
+*/
+
+function createEntityOrion($xtoken, $id){
+    echo "x token is <br>".$xtoken;
+  
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'http://orion-proxy:4002/v2/entities', // use orion-proxy (PEP Proxy for Orion CB) IP address and port instead of Orion CB's 
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>'{
+          "id": "'.$id.'",
+          "type": "Products",
+          "availability": {
+              "value": "1",
+              "type": "Integer"
+          }
+        }',
+        CURLOPT_HTTPHEADER => array(
+          'Content-Type: application/json',
+          'X-Auth-Token: '.$xtoken.'',
+          'Accept: application/json'
+        ),
+      ));
+      
+      curl_exec($curl);
+      curl_close($curl);
+        
+}
+
+function subscribe($user_name, $row){
+    $xtoken=$_SESSION['Access_token'];
+    //id must have no space, so I replace every whitespace with undrscore
+    $id=str_replace(" ", "_", $row['Product_code']);
+    $type="Products";
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => 'http://orion-proxy:4002/v2/subscriptions', // use orion-proxy (PEP Proxy for Orion CB) IP address and port instead of Orion CB's 
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>'{
+            "description": "Dummy description",
+            "subject": {
+                "entities": [
+                    {
+                        "id": "'.$id.'",
+                        "type": "'.$type.'"
+                    }
+                ],
+                "condition": {
+                    "attrs": [
+                        "availability"
+                    ]
+                }
+            },
+            "notification": {
+                "http": {
+                  "url": "http://data-storage:27018/api/api-put-sub.php?Subscribe_product="'.$id.'"
+                },
+                "attrs": [
+                  "availability"
+                ]
+              },
+              "expires": "2040-01-01T14:00:00.00Z"
+            }',
+        CURLOPT_HTTPHEADER => array(
+          'Content-Type: application/json',
+          'X-Auth-Token: '.$xtoken.'',
+          'Accept: application/json'
+        ),
+      ));
+      
+    curl_exec($curl);
+    curl_close($curl);
+
+    //pushing to mongodb (in subscription table)
+
+    $arr=array('subscribe_prod'=>$id,'availability'=>1, 'user'=>$user_name);
+    $data=json_encode($arr);
+    $url="http://data-storage-proxy:4001/api/api-add-sub.php";
+    
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL,$url);
+    curl_setopt($curl, CURLOPT_POST, TRUE);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST,'POST');
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    $response=curl_exec($curl);
+    curl_close($curl);
+
+}
+

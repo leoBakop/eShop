@@ -270,7 +270,9 @@ function add_product_sql($seller, $name,$code, $date,
     ?><script>window.location.replace("./seller.php");</script><?php
 }
 
-function  go_to_update_product_sql($id){
+function  go_to_update_product_sql($id, $code){
+    alert("product code is ".$code);
+    $_SESSION["product_code"]=$code;
     $_SESSION["product_id"]=$id;
     ?><script>window.location.replace("./update_product_sql.php");</script><?php    
 
