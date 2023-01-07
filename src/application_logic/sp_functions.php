@@ -628,9 +628,7 @@ function sp_update_product($product_id, $changes, $value){
 //that method update availability in product table
 function sp_update_product_availability($product_code){
     $id=str_replace(" ", "_", $product_code);
-    echo $_SESSION['Access_token']."<br>";
     $url="http://data-storage-proxy:4001/api/api-update-seller-product.php?Subscribe_product=".$id;
-    echo $url;
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL,$url);
     curl_setopt_array($curl, array(
@@ -645,8 +643,7 @@ function sp_update_product_availability($product_code){
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
     $response=curl_exec($curl);
     curl_close($curl);
-    $result = json_decode($response, true);
-    var_dump($result);
+    return $response;
 }
 
 //method that updates the availability in subscrptions table in mongodb (NOT orion)
@@ -711,6 +708,7 @@ function createEntityOrion($xtoken, $id){
 }
 
 function subscribe($user_name, $row){
+    echo "inside sub";
     $xtoken=$_SESSION['Access_token'];
     //id must have no space, so I replace every whitespace with undrscore
     $id=str_replace(" ", "_", $row['Product_code']);
@@ -744,7 +742,7 @@ function subscribe($user_name, $row){
             },
             "notification": {
                 "http": {
-                  "url": "http://data-storage:27018/api/api-put-sub.php?Subscribe_product="'.$id.'"
+                  "url": "http://app-apache:80/returnSub.php"
                 },
                 "attrs": [
                   "availability"
@@ -759,9 +757,9 @@ function subscribe($user_name, $row){
         ),
       ));
       
-    curl_exec($curl);
+    $response=curl_exec($curl);
     curl_close($curl);
-
+    var_dump($response);
     //pushing to mongodb (in subscription table)
 
     $arr=array('subscribe_prod'=>$id,'availability'=>1, 'user'=>$user_name);
@@ -780,3 +778,36 @@ function subscribe($user_name, $row){
 
 }
 
+
+function update_entity_orion($avail, $product_code){
+    $xtoken=$_SESSION['Access_token'];
+    //id must have no space, so I replace every whitespace with undrscore
+    $id=str_replace(" ", "_", $product_code);    
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => "http://orion-proxy:4002/v2/entities/".$id."/attrs", // use orion-proxy (PEP Proxy for Orion CB) IP address and port instead of Orion CB's 
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'PATCH',
+    CURLOPT_POSTFIELDS =>'{
+        "availability": {
+        "type": "Integer",
+        "value": "'.$avail.'"  
+        }
+        }',
+        CURLOPT_HTTPHEADER => array(
+        'Content-Type: application/json',
+        'X-Auth-Token: '.$xtoken.''
+        ),
+    ));
+
+    $response = curl_exec($curl);
+    curl_close($curl);
+    echo $response;
+
+}

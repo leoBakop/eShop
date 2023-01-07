@@ -48,7 +48,7 @@ if (!loged_in_user()) back_to_index();
 
         <div class="user_welcome">
 
-            <?php echo $_SESSION["Username"] . " (" . $_SESSION["Role"] . ")"  ?>
+            <?php echo $_SESSION["Username"] . " (" . $_SESSION["Role"] . ") ".$_SESSION['Access_token']   ?>
         </div>
     </div>
 

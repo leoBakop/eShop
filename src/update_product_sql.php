@@ -116,8 +116,10 @@ if (!loged_in_user()) back_to_index();
         
                     <?php
                         if (array_key_exists('change_avail', $_POST)) {
-                            sp_update_product_availability($_SESSION['product_code']);
-                            sp_update_availability_subscriptions($_SESSION['product_code']);
+                            $avail=sp_update_product_availability($_SESSION['product_code']);
+                            //now i have to update the entity in orion
+                            echo "current availability is ".$avail;
+                            update_entity_orion($avail,$_SESSION['product_code']);
                         }
                         
                 }

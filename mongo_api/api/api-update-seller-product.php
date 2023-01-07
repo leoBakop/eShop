@@ -14,7 +14,7 @@ if($conn){
         elseif ($avail==0) $avail=1;
 
         $answer = $products->updateOne(['Product_code'=>strval($sub_pr)], ['$set'=>['Availability'=>$avail]]);
-        echo json_encode(array("prev availability"=>$avail));
+        echo $avail;
         die;
     }else{
         $data = json_decode(file_get_contents('php://input'), true);
