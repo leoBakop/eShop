@@ -52,7 +52,7 @@ services:
         volumes:
             - ./mysql_data:/var/lib/mysql
             - ./sql_init:/var/lib/init
-        command: mysqld --init-file="/var/lib/init/idm.sql"
+        command: mysqld --init-file="/var/lib/init/idm.sql" --max_allowed_packet=32505856  
         environment:
           - "MYSQL_ROOT_PASSWORD= secret"
           - "MYSQL_ROOT_HOST= 10.1.2.5"
