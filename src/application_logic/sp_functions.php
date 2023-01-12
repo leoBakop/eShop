@@ -2,6 +2,7 @@
 /*this file consists all the functions
 that use curl requests*/
 include("parser.php");
+//change the default branch to this one
 
 //sp stands for second phase
 #######################################################################################################
@@ -193,7 +194,6 @@ base64(client_id:clientsecret) of the application */
 
 function get_client_id($app_id, $xtoken){
     $ch = curl_init();
-    //request in order to ask all the role for a application
     curl_setopt($ch, CURLOPT_URL, "http://keyrock:3005/v1/applications/".$app_id);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_HEADER, FALSE);
@@ -742,7 +742,7 @@ function subscribe($user_name, $row){
             },
             "notification": {
                 "http": {
-                  "url": "http://app-apache:80/returnSub.php"
+                  "url": "http://app-apache/returnSub.php"
                 },
                 "attrs": [
                   "availability"
