@@ -42,9 +42,10 @@ if (!loged_in_user()) back_to_index();
     <button class="button" onclick="go_to_welcome()">Back </button>
 
     <div class="table">
-        <?php print_users_ajax_sql($con);
+        <?php //print_users_ajax_sql($con);
             //print_users_sql($con);
         ?>
+        <a class="button" href="http://localhost:3005/idm/admins/list_users" target="_blank">Press in order to see the users</a>
     </div>
 
     <?php
