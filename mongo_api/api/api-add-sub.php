@@ -6,6 +6,7 @@
         $user_name=$data['user'];
         $product_code=$data['subscribe_prod'];
         $availability=$data['availability'];
+        $product_name=$data['Product_name'];
         //Select ID from Cart order by asc // in order to take the last id 
         //id_c stands for id_custom
         $filter = [];
@@ -16,9 +17,10 @@
         
         $fields = array(
             'id_c'=>$last_id,
-            'User_ name'=>$user_name,
+            'User_name'=>$user_name,
             'Subscribe_product'=>$product_code, 
-            'Availability'=>$availability
+            'Availability'=>$availability,
+            'Product_name'=>$product_name
         );
         $sub->insertOne($fields);
         

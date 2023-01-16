@@ -12,6 +12,7 @@
         $availability=$data['availability'];
         //Select ID from Cart order by asc // in order to take the last id 
         //id_c stands for id_custom
+        
         $filter = [];
         $options = ['projection' => [], 'sort'=>['id_c'=>-1], 'limit'=>1]; 
         $last_id = ($products->find($filter,$options)->toArray())[0]['id_c'];

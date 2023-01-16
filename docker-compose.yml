@@ -96,9 +96,9 @@ services:
           - PEP_PROXY_AUTH_ENABLED=false
           - PEP_PROXY_IDM_SSL_ENABLED=false
           - PEP_PROXY_IDM_PORT=3005
-          - PEP_PROXY_APP_ID=4c7d735a-86e8-4e14-a1ff-97991dd9c6dd
-          - PEP_PROXY_USERNAME=pep_proxy_acebc4ca-4f6c-46fd-aaff-cd7dc7a1d554
-          - PEP_PASSWORD=pep_proxy_ad15afe2-9621-4bc4-ac8f-1d8bba1cdf92
+          - PEP_PROXY_APP_ID=d6e57ccf-9261-4ec7-a8da-bd9494871e4e
+          - PEP_PROXY_USERNAME=pep_proxy_6b7a2797-000c-4690-b583-4975aa1046d7
+          - PEP_PASSWORD=pep_proxy_5725acce-ba06-4fa3-843c-5a9b6d97cb19
           - PEP_PROXY_PDP=idm
 
 
@@ -140,9 +140,9 @@ services:
           - PEP_PROXY_AUTH_ENABLED=false
           - PEP_PROXY_IDM_SSL_ENABLED=false
           - PEP_PROXY_IDM_PORT=3005
-          - PEP_PROXY_APP_ID=4c7d735a-86e8-4e14-a1ff-97991dd9c6dd
-          - PEP_PROXY_USERNAME=pep_proxy_acebc4ca-4f6c-46fd-aaff-cd7dc7a1d554
-          - PEP_PASSWORD=pep_proxy_ad15afe2-9621-4bc4-ac8f-1d8bba1cdf92
+          - PEP_PROXY_APP_ID=d6e57ccf-9261-4ec7-a8da-bd9494871e4e
+          - PEP_PROXY_USERNAME=pep_proxy_6b7a2797-000c-4690-b583-4975aa1046d7
+          - PEP_PASSWORD=pep_proxy_5725acce-ba06-4fa3-843c-5a9b6d97cb19
           - PEP_PROXY_PDP=idm
 
     orion-mongo:

@@ -645,18 +645,17 @@ function sp_update_product_availability($product_code){
     curl_close($curl);
     return $response;
 }
-
+//i have to skip the pep proxy
 //method that updates the availability in subscrptions table in mongodb (NOT orion)
 function sp_update_availability_subscriptions($product_code){
     $product_code= str_replace(" ", "_", $product_code);
     // i have to change the url
-    $url="http://data-storage-proxy:4001/api/api-put-sub.php?Subscribe_product=".$product_code;
+    $url="http://data-storage:80/api/api-put-sub.php?Subscribe_product=".$product_code;
 
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL,$url);
     curl_setopt($curl, CURLOPT_POST, TRUE);
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST,'PUT');
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
     curl_exec($curl);
     curl_close($curl);
 }
@@ -674,7 +673,6 @@ a subscription is created for this user and this product (in orion)
 */
 
 function createEntityOrion($xtoken, $id){
-    echo "x token is <br>".$xtoken;
   
     $curl = curl_init();
 
@@ -708,7 +706,6 @@ function createEntityOrion($xtoken, $id){
 }
 
 function subscribe($user_name, $row){
-    echo "inside sub";
     $xtoken=$_SESSION['Access_token'];
     //id must have no space, so I replace every whitespace with undrscore
     $id=str_replace(" ", "_", $row['Product_code']);
@@ -742,7 +739,7 @@ function subscribe($user_name, $row){
             },
             "notification": {
                 "http": {
-                  "url": "http://app-apache/returnSub.php"
+                  "url": "http://app-apache:80/returnSub.php"
                 },
                 "attrs": [
                   "availability"
@@ -762,7 +759,7 @@ function subscribe($user_name, $row){
     var_dump($response);
     //pushing to mongodb (in subscription table)
 
-    $arr=array('subscribe_prod'=>$id,'availability'=>1, 'user'=>$user_name);
+    $arr=array('subscribe_prod'=>$id,'availability'=>1, 'user'=>$user_name, 'Product_name'=>$row['Name']);
     $data=json_encode($arr);
     $url="http://data-storage-proxy:4001/api/api-add-sub.php";
     
@@ -784,6 +781,7 @@ function update_entity_orion($avail, $product_code){
     //id must have no space, so I replace every whitespace with undrscore
     $id=str_replace(" ", "_", $product_code);    
     $curl = curl_init();
+    echo "the acces token is ".$xtoken;
 
     curl_setopt_array($curl, array(
     CURLOPT_URL => "http://orion-proxy:4002/v2/entities/".$id."/attrs", // use orion-proxy (PEP Proxy for Orion CB) IP address and port instead of Orion CB's 
@@ -810,4 +808,51 @@ function update_entity_orion($avail, $product_code){
     curl_close($curl);
     echo $response;
 
+}
+
+
+function feed(){
+    if($_SESSION['Role']!="User") return;
+    $user_name=$_SESSION['Username'];
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => 'http://data-storage-proxy:4001/api/api-get-sub.php?user_name='.$user_name, 
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'GET'
+    ));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-Auth-Token: '.$_SESSION['Access_token']));
+    $response = curl_exec($curl);
+    curl_close($curl);
+    $result = json_decode($response, true);
+    ?>
+    <div>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Availability</th>
+        </tr>
+        <?php
+        foreach($result as $row){
+            print_feed_line($row);
+        }?>
+
+    </table>
+    </div>
+    <?php
+}
+
+function print_feed_line($row){
+    $avail="No";
+    if ($row['Availability']==1) $avail="Yes";
+    echo "<tr>";
+        echo "<td>".$row['Product_name']."</td>";
+        echo "<td>".$avail."</td>";
+    echo "</tr>";
 }
